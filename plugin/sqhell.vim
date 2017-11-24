@@ -24,8 +24,7 @@ endfunction
 
 "Execute the current line
 function! ExecuteLine()
-    let line = getline('.')
-    call ExecuteCommand(line)
+    call ExecuteCommand(getline('.'))
 endfunction
 
 "TODO this is broken
@@ -43,6 +42,9 @@ function! InsertResultsToNewBuffer(local_filetype, query_results)
     execute 'setlocal filetype=' . a:local_filetype
 endfunction
 
+"Shows all tables for a given database
+"Can also be ran by pressing 'e' in
+"an SQHDatabase buffer
 function! ShowTablesForDatabase(database)
     call InsertResultsToNewBuffer('SQHTable', GetResultsFromQuery('SHOW TABLES FROM ' . a:database))
 endfunction
@@ -51,8 +53,8 @@ function! ShowDatabases()
     call InsertResultsToNewBuffer('SQHDatabase', GetResultsFromQuery('SHOW DATABASES'))
 endfunction
 
-"This is ran when we press 'e' on a SQHTable buffer"
-function! ShowDataFromTable()
+"This is ran when we press 'e' on an SQHTable buffer
+function! ShowRecordsInTable()
     let current_table = getline('.')
     let current_database = split(getline(search('Tables_in_')), 'Tables_in_')[0]
     let query = 'SELECT * FROM ' . current_database . '.' . current_table . ' LIMIT 100'

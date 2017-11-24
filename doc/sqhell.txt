@@ -89,12 +89,16 @@ SQHTable                                                        *sqhell-sqhtable
     e - Edit the table. It will SELECT 100 results from the table and display
         them to you.
 
-        Note that this opens a buffer with a filetype of SQHResult where more
+        Note this opens a buffer with a filetype of SQHResult where more
         mappings will be (not currently) available.
 
 
 SQHDatabase                                                  *sqhell-sqhdatabase*
     The following mappings are available
+
+    e - Show the tables belonging to this database.
+
+        Note this opens a buffer with a filetype of SQHTable
 
 
 vim:tw=78:ts=8:ft=help:norl:
