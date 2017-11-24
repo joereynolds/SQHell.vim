@@ -1,15 +1,14 @@
-"The connection details for your database
-"Right now these are hardcoded to mysql.
+if exists('g:loaded_sqhell')
+    finish
+endif
+
+let g:loaded_sqhell = 1
+
+"Connection details for your database (currently hardcoded to mysql)
 let g:user = get(g:, 'user', '')
 let g:password = get(g:, 'password', '')
 let g:host = get(g:, 'host', '')
 let g:connection_details = 'mysql -u' . g:user . ' -p' . g:password . ' -h' . g:host
-
-"TODO Move these to the relevant ftplugin"
-augroup sqh_read
-    autocmd!
-    autocmd FileType SQHResult nnoremap <buffer> dd :echom 'my dd test'
-augroup END
 
 "Runs the command returns the results
 function! GetResultsFromQuery(command)
@@ -29,10 +28,11 @@ function! ExecuteLine()
     call ExecuteCommand(line)
 endfunction
 
-"TODO - If none passed in, do the current file"
+"TODO this is broken
 "Execute the given file, or the current file if no file passed
-function! ExecuteFile(file)
-    let file_content = join(readfile(a:file), "\n")
+function! ExecuteFile(...)
+    let file_to_run = get(a:, 1, expand('%'))
+    let file_content = join(readfile(file_to_run), "\n")
 endfunction
 
 function! InsertResultsToNewBuffer(local_filetype, query_results)
@@ -62,5 +62,6 @@ endfunction
 "Expose our functions for the user
 command! -nargs=0 SQHShowDatabases :call ShowDatabases()
 command! -nargs=1 SQHShowTablesForDatabase :call ShowTablesForDatabase(<q-args>)
+command! -nargs=? SQHExecuteFile :call ExecuteFile(<q-args>)
 command! -nargs=1 SQHExecuteCommand :call ExecuteCommand(<q-args>)
 command! -nargs=0 SQHExecuteLine :call ExecuteLine()
