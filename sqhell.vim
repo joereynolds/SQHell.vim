@@ -1,14 +1,8 @@
-"The primary key to do operations on.
-"This can be changed here or via the
-"MarkAsPk command
-"This is currently unimplemented
-let g:primary_key = 'id'
-
 "The connection details for your database
 "Right now these are hardcoded to mysql.
-let g:user = ''
-let g:password = ''
-let g:host = ''
+let g:user = get(g:, 'user', '')
+let g:password = get(g:, 'password', '')
+let g:host = get(g:, 'host', '')
 let g:connection_details = 'mysql -u' . g:user . ' -p' . g:password . ' -h' . g:host
 
 "TODO Move these to the relevant ftplugin"
