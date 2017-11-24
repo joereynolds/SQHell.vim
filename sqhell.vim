@@ -9,7 +9,6 @@ let g:connection_details = 'mysql -u' . g:user . ' -p' . g:password . ' -h' . g:
 augroup sqh_read
     autocmd!
     autocmd FileType SQHResult nnoremap <buffer> dd :echom 'my dd test'
-    autocmd FileType SQHTable nnoremap <buffer> e :call ShowDataFromTable()<cr>
 augroup END
 
 "Runs the command returns the results
@@ -44,11 +43,11 @@ function! InsertResultsToNewBuffer(local_filetype, query_results)
     execute 'setlocal filetype=' . a:local_filetype
 endfunction
 
-function! SQHShowTables(database)
+function! ShowTablesForDatabase(database)
     call InsertResultsToNewBuffer('SQHTable', GetResultsFromQuery('SHOW TABLES FROM ' . a:database))
 endfunction
 
-function! SQHShowDatabases()
+function! ShowDatabases()
     call InsertResultsToNewBuffer('SQHDatabase', GetResultsFromQuery('SHOW DATABASES'))
 endfunction
 
@@ -59,3 +58,9 @@ function! ShowDataFromTable()
     let query = 'SELECT * FROM ' . current_database . '.' . current_table . ' LIMIT 100'
     call ExecuteCommand(query)
 endfunction
+
+"Expose our functions for the user
+command! -nargs=0 SQHShowDatabases :call ShowDatabases()
+command! -nargs=1 SQHShowTablesForDatabase :call ShowTablesForDatabase(<q-args>)
+command! -nargs=1 SQHExecuteCommand :call ExecuteCommand(<q-args>)
+command! -nargs=0 SQHExecuteLine :call ExecuteLine()
