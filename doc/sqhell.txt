@@ -1,0 +1,100 @@
+*sqhell.txt*    For Vim version ?.?     Last Change 2017 November 24
+*sqhell*
+
+SQHell - An SQL wrapper for vim
+
+===============================================================================
+1. Global Options                                                *sqhell-options*
+
+Note It is strongly recommended that you keep your configuration in a separate
+file outside of version control.
+
+g:user                                                                  *g:user*
+
+    Default: ''
+
+    The database user that sqhell will connect as.
+
+g:password                                                           *g:password*
+
+    Default: ''
+
+    The password that sqhell will connect with.
+
+
+g:host                                                                   *g:host*
+
+    Default: ''
+
+    The host that sqhell will connect to..
+
+===============================================================================
+2. Commands                                                     *sqhell-commands*
+
+SQHShowDatabases
+
+    Arguments: none
+    Example: SQHShowDatabases
+
+    Shows all databases
+
+SQHShowTablesForDatabase
+
+    Arguments: table name
+    Example: SQHShowTablesForDatabase Users
+
+    Shows all tables for a given database.
+    Note This creates a buffer with a filetype of SQHTable.
+    See 'sqhell-filetypes'
+
+SQHExecuteFile
+
+    Arguments: filename(optional)
+    Example: SQHExecuteFile /tmp/delete-everything.sql
+    Example: SQHExecuteFile
+
+    Executes a given file as SQL.
+    If a filename is given it executes that file, otherwise defaults to the
+    buffer you are in ('%')
+
+SQHExecuteCommand
+
+    Arguments: command
+    Example: SQHExecuteCommand SELECT * FROM users LIMIT 5
+
+    Executes a given command as an SQL statement.
+    It is case insensitive and you shouldn't quote the query.
+
+SQHExecuteLine
+
+    Arguments: none
+    Example: SQHExecuteLine
+
+    Executes the contents of the current line your cursor
+    is on as an SQL statement
+
+===============================================================================
+3. Filetypes                                                   *sqhell-filetypes*
+
+SQHell comes with a few different filetypes for results to aid in
+context aware operations.
+
+Where possible the mappings available try to stick to Vim's semantics.
+
+SQHTable                                                        *sqhell-sqhtable*
+    The SQHTable view lists all tables for a given database.
+
+    The following mappings are available
+
+    e - Edit the table. It will SELECT 100 results from the table and display
+        them to you.
+
+        Note that this opens a buffer with a filetype of SQHResult where more
+        mappings will be (not currently) available.
+
+
+SQHDatabase                                                  *sqhell-sqhdatabase*
+    The following mappings are available
+
+
+vim:tw=78:ts=8:ft=help:norl:
