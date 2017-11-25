@@ -13,7 +13,7 @@ let g:result_buffer = -1
 
 "Runs the command returns the results
 function! GetResultsFromQuery(command)
-    let system_command = g:connection_details . ' <<< "' . a:command . '" | column -t'
+    let system_command = g:connection_details . ' --table <<< "' . a:command . '"'
     let query_results = system(system_command)
     return query_results
 endfunction
@@ -41,6 +41,7 @@ function! InsertResultsToNewBuffer(local_filetype, query_results)
     setlocal buftype=nofile
     setlocal bufhidden=hide
     setlocal noswapfile
+    setlocal nowrap
     execute 'setlocal filetype=' . a:local_filetype
 endfunction
 
@@ -64,15 +65,15 @@ endfunction
 
 "Tables_in_users_table => users_table"
 function! GetDatabaseName()
-    let current_database = split(getline(search('Tables_in_')), 'Tables_in_')[0]
+    let raw_database = split(getline(search('Tables_in_')), 'Tables_in_')[1]
+    let current_database = substitute(raw_database, '|', '', '')
     return current_database
 endfunction
 
 "This is ran when we press 'e' on an SQHTable buffer
-function! ShowRecordsInTable()
-    let current_table = getline('.')
+function! ShowRecordsInTable(table)
     let db = GetDatabaseName()
-    let query = 'SELECT * FROM ' . db . '.' . current_table . ' LIMIT 100'
+    let query = 'SELECT * FROM ' . db . '.' . a:table . ' LIMIT 100'
     call ExecuteCommand(query)
 endfunction
 
