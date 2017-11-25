@@ -28,7 +28,8 @@ function! ExecuteLine()
     call ExecuteCommand(getline('.'))
 endfunction
 
-"TODO this is broken
+"TODO this is broken. Currently it can only execute a given
+"file, not the default one
 "Execute the given file, or the current file if no file passed
 function! ExecuteFile(...)
     let file_to_run = get(a:, 1, expand('%'))
