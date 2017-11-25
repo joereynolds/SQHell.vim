@@ -23,7 +23,7 @@ NOTE: Currently only MySQL is supported. Support for other DBMS's should be triv
 
 ### Explore the database with buffer aware completions
 
-![](https://i.imgur.com/E12LHnA.gifv)
+![](https://i.imgur.com/E12LHnA.gif)
 
 ## Installation
 
