@@ -13,7 +13,9 @@ NOTE: Currently only MySQL is supported. Support for other DBMS's should be triv
 
 ## Examples
 
-GIFS here
+### Execute a line using `SQHExecuteLine`
+
+![](https://i.imgur.com/j3m62am.gifv)
 
 ## Installation
 
