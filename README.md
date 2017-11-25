@@ -15,7 +15,7 @@ NOTE: Currently only MySQL is supported. Support for other DBMS's should be triv
 
 ### Execute a line using `SQHExecuteLine`
 
-![](https://i.imgur.com/j3m62am.gifv)
+![](https://i.imgur.com/j3m62am.gif)
 
 ## Installation
 
