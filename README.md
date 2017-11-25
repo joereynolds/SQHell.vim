@@ -9,7 +9,7 @@ Currently you can:
 - Execute arbitrary commands
 - View records from a table interactively
 
-NOTE: Currently only MySQL is supported. Support for DBMS's should be trivial to add but are currently unimplemented.
+NOTE: Currently only MySQL is supported. Support for other DBMS's should be trivial to add but are currently unimplemented.
 
 ## Examples
 
@@ -37,14 +37,12 @@ let g:password = 'hunter2'
 let g:host = 'mydatabaseconnection.office'
 ```
 
-###  Safety
-
 I **strongly** suggest that the above configuration details are kept *outside*
 of version control and gitignored in your global gitignore.
 
-## What about DBExt, vim-sql-workbench and others?
+## What about dbext, vim-sql-workbench and others?
 
-DBExt is very featurefuk (and very good) but comes in at a whopping 12000 lines
+DBExt is very featureful (and very good) but comes in at a whopping 12000 lines
 of code. By contrast SQHell.vim is a mere ~100 lines
 
 The setup and installation process for vim-sql-workbench is something that I
