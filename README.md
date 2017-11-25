@@ -13,9 +13,14 @@ NOTE: Currently only MySQL is supported. Support for other DBMS's should be triv
 
 ## Examples
 
+(Gifs are using the data from my punk rock band [bogans](http://bogans.uk))
 ### Execute a command using `SQHExecuteCommand`
 
 ![](https://i.imgur.com/AUEhN2C.gif)
+
+### Execute a file using `SQHExecuteFile`
+
+![](https://i.imgur.com/67nONqC.gif)
 
 ### Execute a line using `SQHExecuteLine`
 
