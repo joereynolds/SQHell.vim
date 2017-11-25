@@ -9,6 +9,7 @@ let g:user = get(g:, 'user', '')
 let g:password = get(g:, 'password', '')
 let g:host = get(g:, 'host', '')
 let g:connection_details = 'mysql -u' . g:user . ' -p' . g:password . ' -h' . g:host
+let g:result_buffer = -1
 
 "Runs the command returns the results
 function! GetResultsFromQuery(command)
@@ -35,7 +36,14 @@ function! ExecuteFile(...)
 endfunction
 
 function! InsertResultsToNewBuffer(local_filetype, query_results)
-    new | put =a:query_results
+
+    " if g:result_buffer == -1
+        new | put =a:query_results
+        " let g:result_buffer = bufnr("$")
+    " else
+        " buffers! g:result_buffer
+    " endif
+
     setlocal buftype=nofile
     setlocal bufhidden=hide
     setlocal noswapfile
@@ -49,15 +57,28 @@ function! ShowTablesForDatabase(database)
     call InsertResultsToNewBuffer('SQHTable', GetResultsFromQuery('SHOW TABLES FROM ' . a:database))
 endfunction
 
+"This is ran when press 'K' on an SQHTable buffer"
+function! DescribeTable(table)
+    let db = GetDatabaseName()
+    let query = 'DESCRIBE ' . db . '.' . a:table
+    call InsertResultsToNewBuffer('SQHUnspecified', GetResultsFromQuery(query))
+endfunction
+
 function! ShowDatabases()
     call InsertResultsToNewBuffer('SQHDatabase', GetResultsFromQuery('SHOW DATABASES'))
+endfunction
+
+"Tables_in_users_table => users_table"
+function! GetDatabaseName()
+    let current_database = split(getline(search('Tables_in_')), 'Tables_in_')[0]
+    return current_database
 endfunction
 
 "This is ran when we press 'e' on an SQHTable buffer
 function! ShowRecordsInTable()
     let current_table = getline('.')
-    let current_database = split(getline(search('Tables_in_')), 'Tables_in_')[0]
-    let query = 'SELECT * FROM ' . current_database . '.' . current_table . ' LIMIT 100'
+    let db = GetDatabaseName()
+    let query = 'SELECT * FROM ' . db . '.' . current_table . ' LIMIT 100'
     call ExecuteCommand(query)
 endfunction
 
