@@ -36,14 +36,7 @@ function! ExecuteFile(...)
 endfunction
 
 function! InsertResultsToNewBuffer(local_filetype, query_results)
-
-    " if g:result_buffer == -1
-        new | put =a:query_results
-        " let g:result_buffer = bufnr("$")
-    " else
-        " buffers! g:result_buffer
-    " endif
-
+    new | put =a:query_results
     setlocal buftype=nofile
     setlocal bufhidden=hide
     setlocal noswapfile
