@@ -3,41 +3,16 @@ if exists('g:loaded_sqhell')
 endif
 
 let g:loaded_sqhell = 1
-
-"Connection details for your database (currently hardcoded to mysql)
-let g:user = get(g:, 'user', '')
-let g:password = get(g:, 'password', '')
-let g:host = get(g:, 'host', '')
-let g:connection_details = 'mysql -u' . g:user . ' -p' . g:password . ' -h' . g:host
+let g:sqh_user = get(g:, 'user', '')
+let g:sqh_password = get(g:, 'password', '')
+let g:sqh_host = get(g:, 'host', '')
 let g:result_buffer = -1
-
-"Runs the command returns the results
-function! GetResultsFromQuery(command)
-    let system_command = g:connection_details . ' --table <<< "' . a:command . '"'
-    let query_results = system(system_command)
-    return query_results
-endfunction
-
-"Inserts SQL results into a new temporary buffer"
-function! ExecuteCommand(command)
-    call InsertResultsToNewBuffer('SQHResult', GetResultsFromQuery(a:command))
-endfunction
-
-"Execute the current line
-function! ExecuteLine()
-    call ExecuteCommand(getline('.'))
-endfunction
-
-"TODO this is broken. Currently it can only execute a given
-"file, not the default one
-"Execute the given file, or the current file if no file passed
-function! ExecuteFile(...)
-    let file_to_run = get(a:, 1, expand('%'))
-    let file_content = join(readfile(file_to_run), "\n")
-endfunction
 
 function! InsertResultsToNewBuffer(local_filetype, query_results)
     new | put =a:query_results
+
+    "Remove mysql junk"
+    normal gg2dd
     setlocal buftype=nofile
     setlocal bufhidden=hide
     setlocal noswapfile
@@ -45,41 +20,24 @@ function! InsertResultsToNewBuffer(local_filetype, query_results)
     execute 'setlocal filetype=' . a:local_filetype
 endfunction
 
-"Shows all tables for a given database
-"Can also be ran by pressing 'e' in
-"an SQHDatabase buffer
-function! ShowTablesForDatabase(database)
-    call InsertResultsToNewBuffer('SQHTable', GetResultsFromQuery('SHOW TABLES FROM ' . a:database))
+function! ChangeHost(host)
+    let g:sqh_host = a:host
 endfunction
 
-"This is ran when press 'K' on an SQHTable buffer"
-function! DescribeTable(table)
-    let db = GetDatabaseName()
-    let query = 'DESCRIBE ' . db . '.' . a:table
-    call InsertResultsToNewBuffer('SQHUnspecified', GetResultsFromQuery(query))
+function! ChangeUser(user)
+    let g:sqh_user = a:user
 endfunction
 
-function! ShowDatabases()
-    call InsertResultsToNewBuffer('SQHDatabase', GetResultsFromQuery('SHOW DATABASES'))
-endfunction
-
-"Tables_in_users_table => users_table"
-function! GetDatabaseName()
-    let raw_database = split(getline(search('Tables_in_')), 'Tables_in_')[1]
-    let current_database = substitute(raw_database, '|', '', '')
-    return current_database
-endfunction
-
-"This is ran when we press 'e' on an SQHTable buffer
-function! ShowRecordsInTable(table)
-    let db = GetDatabaseName()
-    let query = 'SELECT * FROM ' . db . '.' . a:table . ' LIMIT 100'
-    call ExecuteCommand(query)
+function! ChangePassword(password)
+    let g:sqh_password = a:password
 endfunction
 
 "Expose our functions for the user
-command! -nargs=0 SQHShowDatabases :call ShowDatabases()
-command! -nargs=1 SQHShowTablesForDatabase :call ShowTablesForDatabase(<q-args>)
-command! -nargs=? SQHExecuteFile :call ExecuteFile(<q-args>)
-command! -nargs=1 SQHExecuteCommand :call ExecuteCommand(<q-args>)
-command! -nargs=0 SQHExecuteLine :call ExecuteLine()
+command! -nargs=0 SQHShowDatabases :call mysql#ShowDatabases()
+command! -nargs=1 SQHShowTablesForDatabase :call mysql#ShowTablesForDatabase(<q-args>)
+command! -nargs=? SQHExecuteFile :call mysql#ExecuteFile(<q-args>)
+command! -nargs=1 SQHExecuteCommand :call mysql#ExecuteCommand(<q-args>)
+command! -nargs=0 SQHExecuteLine :call mysql#ExecuteLine()
+command! -nargs=1 SQHChangeUser :call ChangeUser(<q-args>)
+command! -nargs=1 SQHChangeHost :call ChangeHost(<q-args>)
+command! -nargs=1 SQHChangePassword :call ChangePassword(<q-args>)
