@@ -26,7 +26,7 @@ NOTE: Currently only MySQL is supported. Support for other DBMS's should be triv
 
 ![](https://i.imgur.com/j3m62am.gif)
 
-### Explore the database with buffer aware completions
+### Explore the database with buffer aware mappings
 
 ![](https://i.imgur.com/E12LHnA.gif)
 
