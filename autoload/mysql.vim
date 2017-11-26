@@ -1,6 +1,6 @@
 function! mysql#GetResultsFromQuery(command)
     let connection_details = 'mysql -u' . g:sqh_user . ' -p' . g:sqh_password . ' -h' . g:sqh_host
-    let system_command = connection_details . ' --table <<< "' . a:command . '"'
+    let system_command = connection_details . " --table -e '" . a:command . "'"
     let query_results = system(system_command)
     return query_results
 endfunction
@@ -13,10 +13,10 @@ function! mysql#GetDatabaseName()
 endfunction
 
 "This is ran when press 'K' on an SQHTable buffer"
-function! DescribeTable(table)
+function! mysql#DescribeTable(table)
     let db = mysql#GetDatabaseName()
     let query = 'DESCRIBE ' . db . '.' . a:table
-    call sqlhell#InsertResultsToNewBuffer('SQHUnspecified', mysql#GetResultsFromQuery(query))
+    call sqhell#InsertResultsToNewBuffer('SQHUnspecified', mysql#GetResultsFromQuery(query))
 endfunction
 
 "This is ran when we press 'e' on an SQHTable buffer
