@@ -6,12 +6,12 @@ let g:loaded_sqhell = 1
 let g:sqh_user = get(g:, 'user', '')
 let g:sqh_password = get(g:, 'password', '')
 let g:sqh_host = get(g:, 'host', '')
-let g:result_buffer = -1
 
 function! InsertResultsToNewBuffer(local_filetype, query_results)
     new | put =a:query_results
 
     "Remove mysql junk"
+    "this should probably go into the ftplugin on BufReadPre
     normal gg2dd
     setlocal buftype=nofile
     setlocal bufhidden=hide
