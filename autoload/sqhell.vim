@@ -1,25 +1,5 @@
-function! sqhell#GetHost()
-    return g:sqh_host
-endfunction
-
-function! sqhell#GetUser()
-    return g:sqh_user
-endfunction
-
-function! sqhell#GetPassword()
-    return g:sqh_password
-endfunction
-
-function! sqhell#SetHost(host)
-    let g:sqh_host = a:host
-endfunction
-
-function! sqhell#SetUser(user)
-    let g:sqh_user = a:user
-endfunction
-
-function! sqhell#SetPassword(password)
-    let g:sqh_password = a:password
+function! sqhell#SwitchConnection(connection)
+    let g:sqh_connection = a:connection
 endfunction
 
 function! sqhell#InsertResultsToNewBuffer(local_filetype, query_results)

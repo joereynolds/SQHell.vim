@@ -9,36 +9,38 @@ SQHell - An SQL wrapper for vim
 Note It is strongly recommended that you keep your configuration in a separate
 file outside of version control.
 
-g:user                                                                  *g:user*
+Once the plugin is installed, you will need to add a dictionary that can be
+loaded called `g:sqh_connections`.
 
-    Default: ''
+An example is given below containing multiple hosts
 
-    The database user that sqhell will connect as.
+    let g:sqh_connections = {
+        \ 'default': {
+        \   'user': 'root',
+        \   'password': 'testing345',
+        \   'host': 'localhost'
+        \},
+        \ 'live': {
+        \   'user': 'root',
+        \   'password': 'gdfgee6£"^f',
+        \   'host': '45.211.32.521'
+        \}
+    \}
 
-g:password                                                           *g:password*
-
-    Default: ''
-
-    The password that sqhell will connect with.
-
-
-g:host                                                                   *g:host*
-
-    Default: ''
-
-    The host that sqhell will connect to..
+By default, SQHell uses the 'default' key connection details.
+In order to connect, each entry needs a 'user', 'password', and 'host' key.
 
 ===============================================================================
 2. Commands                                                     *sqhell-commands*
 
-SQHShowDatabases
+SQHShowDatabases                                          *sqhell-show-databases*
 
     Arguments: none
     Example: SQHShowDatabases
 
     Shows all databases
 
-SQHShowTablesForDatabase
+SQHShowTablesForDatabase                        *sqhell-show-tables-for-database*
 
     Arguments: table name
     Example: SQHShowTablesForDatabase Users
@@ -47,7 +49,7 @@ SQHShowTablesForDatabase
     Note This creates a buffer with a filetype of SQHTable.
     See 'sqhell-filetypes'
 
-SQHExecuteFile
+SQHExecuteFile                                              *sqhell-execute-file*
 
     Arguments: filename(optional)
     Example: SQHExecuteFile /tmp/delete-everything.sql
@@ -57,7 +59,7 @@ SQHExecuteFile
     If a filename is given it executes that file, otherwise defaults to the
     buffer you are in ('%')
 
-SQHExecuteCommand
+SQHExecuteCommand                                        *sqhell-execute-command*
 
     Arguments: command
     Example: SQHExecuteCommand SELECT * FROM users LIMIT 5
@@ -65,13 +67,22 @@ SQHExecuteCommand
     Executes a given command as an SQL statement.
     It is case insensitive and you shouldn't quote the query.
 
-SQHExecuteLine
+SQHExecuteLine                                             *sqhell-execute-line*
 
     Arguments: none
     Example: SQHExecuteLine
 
     Executes the contents of the current line your cursor
     is on as an SQL statement
+
+SQHSwitchConnection                                   *sqhell-switch-connection*
+
+    Arguments: connection name
+    Example: SQHSwitchConnection live
+
+    Switches the connection details to the given host specified
+    in g:sqh_connections
+
 
 ===============================================================================
 3. Filetypes                                                   *sqhell-filetypes*

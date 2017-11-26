@@ -15,18 +15,7 @@ function! Test_results_buffer_has_correct_local_settings()
     quit
 endfunction
 
-function! Test_setting_connection_details_works()
-    call sqhell#SetUser('testUser')
-    call sqhell#SetPassword('hunter2')
-    call sqhell#SetHost('localhost')
-
-    call assert_equal(sqhell#GetPassword(), 'hunter2')
-    call assert_equal(sqhell#GetUser(), 'testUser')
-    call assert_equal(sqhell#GetHost(), 'localhost')
-endfunction
-
 call Test_results_buffer_sets_the_correct_filetype()
 call Test_results_buffer_has_correct_local_settings()
-call Test_setting_connection_details_works()
 
 echo v:errors

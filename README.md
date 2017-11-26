@@ -42,15 +42,28 @@ Plug 'joereynolds/SQHell.vim'
 ## Configuration
 
 Connection details will need to be supplied in order for SQHell.vim to connect
-to your DBMS of choice.
+to your DBMS of choice. The connections are in a dictionary to let you manage
+multiple hosts. By default SQHell uses the 'default' key details (no surprise there)
 
 Example:
 
 ```
-let g:user = 'root'
-let g:password = 'hunter2'
-let g:host = 'mydatabaseconnection.office'
+let g:sqh_connections = {
+    \ 'default': {
+    \   'user': 'root',
+    \   'password': 'testing345',
+    \   'host': 'localhost'
+    \},
+    \ 'live': {
+    \   'user': 'root',
+    \   'password': 'jerw5Y^$Hdfj',
+    \   'host': '46.121.44.392'
+    \}
+\}
 ```
+
+You can use the `SQHSwitchConnection` function to change hosts.
+i.e. `SQHSwitchConnection live`
 
 I **strongly** suggest that the above configuration details are kept *outside*
 of version control and gitignored in your global gitignore.
