@@ -16,7 +16,7 @@ endfunction
 function! DescribeTable(table)
     let db = mysql#GetDatabaseName()
     let query = 'DESCRIBE ' . db . '.' . a:table
-    call InsertResultsToNewBuffer('SQHUnspecified', mysql#GetResultsFromQuery(query))
+    call sqlhell#InsertResultsToNewBuffer('SQHUnspecified', mysql#GetResultsFromQuery(query))
 endfunction
 
 "This is ran when we press 'e' on an SQHTable buffer
@@ -27,20 +27,20 @@ function! mysql#ShowRecordsInTable(table)
 endfunction
 
 function! mysql#ShowDatabases()
-    call InsertResultsToNewBuffer('SQHDatabase', mysql#GetResultsFromQuery('SHOW DATABASES'))
+    call sqhell#InsertResultsToNewBuffer('SQHDatabase', mysql#GetResultsFromQuery('SHOW DATABASES'))
 endfunction
 
 "Shows all tables for a given database
 "Can also be ran by pressing 'e' in
 "an SQHDatabase buffer
 function! mysql#ShowTablesForDatabase(database)
-    call InsertResultsToNewBuffer('SQHTable', mysql#GetResultsFromQuery('SHOW TABLES FROM ' . a:database))
+    call sqhell#InsertResultsToNewBuffer('SQHTable', mysql#GetResultsFromQuery('SHOW TABLES FROM ' . a:database))
 endfunction
 
 "TODO - Is platform agnostic and should not be inthe mysql file.
 "Inserts SQL results into a new temporary buffer"
 function! mysql#ExecuteCommand(command)
-    call InsertResultsToNewBuffer('SQHResult', mysql#GetResultsFromQuery(a:command))
+    call sqhell#InsertResultsToNewBuffer('SQHResult', mysql#GetResultsFromQuery(a:command))
 endfunction
 
 "TODO - Is platform agnostic and should not be inthe mysql file.
