@@ -11,4 +11,5 @@ command! -nargs=1 SQHShowTablesForDatabase :call mysql#ShowTablesForDatabase(<q-
 command! -nargs=? SQHExecuteFile :call mysql#ExecuteFile(<q-args>)
 command! -nargs=1 SQHExecuteCommand :call mysql#ExecuteCommand(<q-args>)
 command! -nargs=0 SQHExecuteLine :call mysql#ExecuteLine()
+command! -range -nargs=0 SQHExecuteBlock <line1>,<line2>:call mysql#ExecuteBlock()
 command! -nargs=1 SQHSwitchConnection :call sqhell#SwitchConnection(<q-args>)

@@ -48,6 +48,17 @@ function! mysql#ExecuteCommand(command)
 endfunction
 
 "TODO - Is platform agnostic and should not be inthe mysql file.
+function! mysql#ExecuteBlock() range
+    "TODO extract the block selection out so we can test it
+    let previous_register_content = @"
+    silent! execute a:firstline . ',' . a:lastline . 'y'
+    let query = @"
+    "Restore whatever was in here back to normal
+    let @" = previous_register_content
+    call mysql#ExecuteCommand(query)
+endfunction
+
+"TODO - Is platform agnostic and should not be inthe mysql file.
 "Execute the current line
 function! mysql#ExecuteLine()
     call mysql#ExecuteCommand(getline('.'))
@@ -59,4 +70,3 @@ function! mysql#ExecuteFile(file)
     let file_content = join(readfile(a:file), "\n")
     call mysql#ExecuteCommand(file_content)
 endfunction
-

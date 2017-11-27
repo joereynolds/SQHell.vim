@@ -79,6 +79,13 @@ SQHExecuteCommand                                        *sqhell-execute-command
     Executes a given command as an SQL statement.
     It is case insensitive and you shouldn't quote the query.
 
+SQHExecuteBlock                                            *sqhell-execute-block*
+
+    Arguments: none
+    Example: SQHExecuteBlock
+
+    Executes the contents of the current visual selection as an SQL statement
+
 SQHExecuteLine                                             *sqhell-execute-line*
 
     Arguments: none
