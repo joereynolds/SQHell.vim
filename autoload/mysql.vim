@@ -4,7 +4,7 @@ function! mysql#GetResultsFromQuery(command)
     let host = g:sqh_connections[g:sqh_connection]['host']
 
     let connection_details = 'mysql --unbuffered -u' . user . ' -p' . password . ' -h' . host
-    let system_command = connection_details . " --table -e '" . a:command . "'"
+    let system_command = connection_details . " --table -e " . shellescape(a:command)
     let query_results = system(system_command)
     return query_results
 endfunction
