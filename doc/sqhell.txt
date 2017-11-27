@@ -30,6 +30,18 @@ An example is given below containing multiple hosts
 By default, SQHell uses the 'default' key connection details.
 In order to connect, each entry needs a 'user', 'password', and 'host' key.
 
+g:sqh_connection                                              *sqhell-connection*
+
+The host to connect to, the default is 'default'.
+
+g:sqh_results_limit                                        *sqhell-results-limit*
+
+How many entries to limit by when we view a tables results.
+Default is 100
+
+i.e. `let g:sqh_results_limit = 1000`
+
+
 ===============================================================================
 2. Commands                                                     *sqhell-commands*
 
