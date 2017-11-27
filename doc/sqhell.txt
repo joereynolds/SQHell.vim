@@ -107,19 +107,20 @@ Where possible the mappings available try to stick to Vim's semantics.
 SQHTable                                                        *sqhell-sqhtable*
     The SQHTable view lists all tables for a given database.
 
-    The following mappings are available
-
-    e - Edit the table. It will SELECT 100 results from the table and display
+    `e` - Edit the table. It will SELECT 100 results from the table and display
         them to you.
 
         Note this opens a buffer with a filetype of SQHResult where more
         mappings will be (not currently) available.
 
+    `K` - Describe the table. An easy way to remember this mapping is that
+        K shows man pages and help pages with other vim files, this is
+        semantically similar.
+
 
 SQHDatabase                                                  *sqhell-sqhdatabase*
-    The following mappings are available
 
-    e - Show the tables belonging to this database.
+    `e` - Show the tables belonging to this database.
 
         Note this opens a buffer with a filetype of SQHTable
 
