@@ -41,6 +41,13 @@ Default is 100
 
 i.e. `let g:sqh_results_limit = 1000`
 
+g:sqh_provider                                                  *sqhell-provider*
+
+The database provider to use, by default it is MySQL.
+The name of the provider should match the name under
+the `autoload` directory.
+
+i.e. `let g:sqh_provider = 'postgres'`
 
 ===============================================================================
 2. Commands                                                     *sqhell-commands*
