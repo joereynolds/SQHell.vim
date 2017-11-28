@@ -3,7 +3,8 @@ if exists('g:loaded_sqhell')
 endif
 
 let g:loaded_sqhell = 1
-let g:sqh_connection = get (g:, 'sqh_connection', 'default')
+let g:sqh_provider = get(g:, 'sqh_provider', 'mysql')
+let g:sqh_connection = get(g:, 'sqh_connection', 'default')
 let g:sqh_results_limit = get(g:, 'sqh_results_limit', 100)
 
 command! -nargs=0 SQHShowDatabases :call mysql#ShowDatabases()
