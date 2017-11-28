@@ -49,6 +49,13 @@ the `autoload` directory.
 
 i.e. `let g:sqh_provider = 'postgres'`
 
+g:i_like_to_live_life_dangerously                          *sqhell-danger-prompt*
+
+Should SQHell prompt you before executing a dangerous action?
+Set to a non-zero value to disable the prompt.
+Default is 0
+
+
 ===============================================================================
 2. Commands                                                     *sqhell-commands*
 
@@ -67,6 +74,13 @@ SQHShowTablesForDatabase                        *sqhell-show-tables-for-database
     Shows all tables for a given database.
     Note This creates a buffer with a filetype of SQHTable.
     See 'sqhell-filetypes'
+
+SQHDropDatabase                                            *sqhell-drop-database*
+
+    Arguments: database name
+    Example: SQHDropDatabase Users
+
+    Drops the given database.
 
 SQHExecuteFile                                              *sqhell-execute-file*
 
@@ -137,6 +151,10 @@ SQHDatabase                                                  *sqhell-sqhdatabase
     `e` - Show the tables belonging to this database.
 
         Note this opens a buffer with a filetype of SQHTable
+
+    `dd` - Drop the database.
+
+         Note this reload the current SQHDatabase buffer
 
 
 vim:tw=78:ts=8:ft=help:norl:
