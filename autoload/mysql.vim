@@ -48,10 +48,17 @@ endfunction
 " - database: string, the database name
 " - show: boolean, show databases?
 function! mysql#DropDatabase(database, show)
-    call mysql#GetResultsFromQuery('DROP DATABASE ' . a:database)
-    if(a:show)
-      :bd
-      call mysql#ShowDatabases()
+    if(!g:i_like_to_live_life_dangerously)
+        let prompt = confirm('Do you really want to drop the database: ' . a:database . '?', "&Yes\n&No", 2)
+    else
+        let prompt = 1
+    endif
+    if(prompt == 1)
+        call mysql#GetResultsFromQuery('DROP DATABASE ' . a:database)
+        if(a:show)
+          :bd
+          call mysql#ShowDatabases()
+        endif
     endif
 endfunction
 
