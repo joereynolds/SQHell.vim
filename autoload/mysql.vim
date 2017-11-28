@@ -41,6 +41,20 @@ function! mysql#ShowTablesForDatabase(database)
     call sqhell#InsertResultsToNewBuffer('SQHTable', mysql#GetResultsFromQuery('SHOW TABLES FROM ' . a:database))
 endfunction
 
+"Drops database at cursor
+"Can also be ran by pressing 'dd' in
+"an SQHDatabase buffer
+"Arguments:
+" - database: string, the database name
+" - show: boolean, show databases?
+function! mysql#DropDatabase(database, show)
+    call mysql#GetResultsFromQuery('DROP DATABASE ' . a:database)
+    if(a:show)
+      :bd
+      call mysql#ShowDatabases()
+    endif
+endfunction
+
 "TODO - Is platform agnostic and should not be inthe mysql file.
 "Inserts SQL results into a new temporary buffer"
 function! mysql#ExecuteCommand(command)
