@@ -26,7 +26,7 @@ endfunction
 "This is ran when we press 'e' on an SQHTable buffer
 function! mysql#ShowRecordsInTable(table)
     let db = mysql#GetDatabaseName()
-    let query = 'SELECT * FROM ' . db . '.' . a:table . ' LIMIT ' . g:results_limit
+    let query = 'SELECT * FROM ' . db . '.' . a:table . ' LIMIT ' . g:sqh_results_limit
     call mysql#ExecuteCommand(query)
 endfunction
 
