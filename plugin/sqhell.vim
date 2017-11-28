@@ -4,7 +4,7 @@ endif
 
 let g:loaded_sqhell = 1
 let g:sqh_connection = get (g:, 'sqh_connection', 'default')
-let g:results_limit = get(g:, 'sqh_results_limit', 100)
+let g:sqh_results_limit = get(g:, 'sqh_results_limit', 100)
 
 command! -nargs=0 SQHShowDatabases :call mysql#ShowDatabases()
 command! -nargs=1 SQHShowTablesForDatabase :call mysql#ShowTablesForDatabase(<q-args>)
