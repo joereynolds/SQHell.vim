@@ -26,6 +26,10 @@ NOTE: Currently only MySQL is supported. Support for other DBMS's should be triv
 
 ![](https://i.imgur.com/j3m62am.gif)
 
+### Execute a block using `SQHExecuteBlock`
+
+![](https://i.imgur.com/40uCqVI.gif)
+
 ### Explore the database with buffer aware mappings
 
 ![](https://i.imgur.com/E12LHnA.gif)
