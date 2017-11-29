@@ -1,5 +1,11 @@
 function! sqhell#SwitchConnection(connection)
     let g:sqh_connection = a:connection
+    let valid_connections = keys(g:sqh_connections)
+
+    if index(valid_connections, a:connection) == -1
+        echom '[SQHELL] host must be one of [' . join(valid_connections, ', ') . ']'
+    endif
+
 endfunction
 
 "Inserts SQL results into a new temporary buffer"
