@@ -34,9 +34,7 @@ endfunction
 function! sqhell#InsertResultsToNewBuffer(local_filetype, query_results)
     new | put =a:query_results
 
-    "Remove mysql junk"
-    "this should probably go into the ftplugin on BufReadPre
-    normal gg2dd
+    execute "call " . g:sqh_provider . "#PostBufferFormat()"
 
     "This prevents newline characters from literally rendering out
     "Keeping this as a comment just incase anyone decides to get

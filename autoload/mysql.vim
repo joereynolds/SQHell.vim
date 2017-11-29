@@ -102,3 +102,11 @@ function! mysql#ExecuteBlock() range
     let @" = previous_register_content
     call sqhell#ExecuteCommand(query)
 endfunction
+
+"Each provider may paste some extra
+"crap that is irrelevant to us
+"Use this function to customise
+"the removal of said crap...
+function! mysql#PostBufferFormat()
+    normal gg2dd
+endfunction
