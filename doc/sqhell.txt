@@ -82,6 +82,13 @@ SQHDropDatabase                                            *sqhell-drop-database
 
     Drops the given database.
 
+SQHDropTableFromDatabase                        *sqhell-drop-table-form-database*
+
+    Arguments: database name, table name
+    Example: SQHDropTableFromDatabase Users Profiles
+
+    Drops the given table from the database.
+
 SQHExecuteFile                                              *sqhell-execute-file*
 
     Arguments: filename(optional)
@@ -141,6 +148,10 @@ SQHTable                                                        *sqhell-sqhtable
         Note this opens a buffer with a filetype of SQHResult where more
         mappings will be (not currently) available.
 
+    `dd` - Drop the table.
+
+        Note this reloads the current SQHTable buffer
+
     `K` - Describe the table. An easy way to remember this mapping is that
         K shows man pages and help pages with other vim files, this is
         semantically similar.
@@ -154,7 +165,7 @@ SQHDatabase                                                  *sqhell-sqhdatabase
 
     `dd` - Drop the database.
 
-         Note this reload the current SQHDatabase buffer
+         Note this reloads the current SQHDatabase buffer
 
 
 vim:tw=78:ts=8:ft=help:norl:
