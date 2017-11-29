@@ -10,7 +10,7 @@ let g:i_like_to_live_life_dangerously = get(g:, 'i_like_to_live_life_dangerously
 
 command! -nargs=0 SQHShowDatabases execute "call " . g:sqh_provider . "#ShowDatabases()"
 command! -nargs=1 SQHShowTablesForDatabase execute "call " . g:sqh_provider . "#ShowTablesForDatabase(<q-args>)"
-command! -nargs=? SQHExecuteFile execute "call " . g:sqh_provider . "#ExecuteFile(<q-args>)"
+command! -nargs=? SQHExecuteFile call sqhell#ExecuteFile(<q-args>)
 command! -nargs=* SQHExecuteCommand call sqhell#ExecuteCommand(<q-args>)
 command! -nargs=0 SQHExecuteLine call  sqhell#ExecuteLine()
 command! -range -nargs=0 SQHExecuteBlock execute "<line1>,<line2>call " . g:sqh_provider . "#ExecuteBlock()"

@@ -1,10 +1,12 @@
 function! sqhell#SwitchConnection(connection)
-    let g:sqh_connection = a:connection
     let valid_connections = keys(g:sqh_connections)
 
     if index(valid_connections, a:connection) == -1
         echom '[SQHELL] host must be one of [' . join(valid_connections, ', ') . ']'
+        return
     endif
+
+    let g:sqh_connection = a:connection
 
 endfunction
 
@@ -15,6 +17,18 @@ endfunction
 
 function! sqhell#ExecuteLine()
     call sqhell#ExecuteCommand(getline('.'))
+endfunction
+
+"Execute the given file
+function! sqhell#ExecuteFile(...)
+    let _file = get(a:, 1)
+
+    if a:1 == ''
+        let _file = expand('%:p')
+    endif
+
+    let file_content = join(readfile(_file), "\n")
+    call sqhell#ExecuteCommand(file_content)
 endfunction
 
 function! sqhell#InsertResultsToNewBuffer(local_filetype, query_results)

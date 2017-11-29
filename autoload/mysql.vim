@@ -102,16 +102,3 @@ function! mysql#ExecuteBlock() range
     let @" = previous_register_content
     call sqhell#ExecuteCommand(query)
 endfunction
-
-"TODO - Is platform agnostic and should not be inthe mysql file.
-"Execute the given file
-function! mysql#ExecuteFile(...)
-    let _file = get(a:, 1)
-
-    if a:1 == ''
-        let _file = expand('%:p')
-    endif
-
-    let file_content = join(readfile(_file), "\n")
-    call sqhell#ExecuteCommand(file_content)
-endfunction
