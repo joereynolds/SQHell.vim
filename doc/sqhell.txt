@@ -47,7 +47,7 @@ The database provider to use, by default it is MySQL.
 The name of the provider should match the name under
 the `autoload` directory.
 
-i.e. `let g:sqh_provider = 'postgres'`
+i.e. `let g:sqh_provider = 'psql'`
 
 g:i_like_to_live_life_dangerously                          *sqhell-danger-prompt*
 
@@ -142,7 +142,8 @@ Where possible the mappings available try to stick to Vim's semantics.
 SQHTable                                                        *sqhell-sqhtable*
     The SQHTable view lists all tables for a given database.
 
-    `e` - Edit the table. It will SELECT 100 results from the table and display
+    `e` - Edit the table. 
+        It will SELECT `g:sqh_results_limit` results from the table and display
         them to you.
 
         Note this opens a buffer with a filetype of SQHResult where more

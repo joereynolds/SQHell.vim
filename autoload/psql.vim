@@ -9,6 +9,11 @@ function! psql#GetResultsFromQuery(command)
     return query_results
 endfunction
 
+function! psql#ShowDatabases()
+    let db_query = 'SELECT datname FROM pg_database WHERE datistemplate = false;'
+    call sqhell#InsertResultsToNewBuffer('SQHDatabase', psql#GetResultsFromQuery(db_query))
+endfunction
+
 function! psql#PostBufferFormat()
     normal ggdd
 endfunction

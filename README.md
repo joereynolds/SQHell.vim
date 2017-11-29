@@ -9,7 +9,8 @@ Currently you can:
 - Execute arbitrary commands
 - View records from a table interactively
 
-NOTE: Currently only MySQL is supported. Support for other DBMS's should be trivial to add but are currently unimplemented.
+NOTE:
+MySql has the most features, there is basic support for Postgres which is being worked on...
 
 ## Examples
 
