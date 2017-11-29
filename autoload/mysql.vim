@@ -27,7 +27,7 @@ endfunction
 function! mysql#ShowRecordsInTable(table)
     let db = mysql#GetDatabaseName()
     let query = 'SELECT * FROM ' . db . '.' . a:table . ' LIMIT ' . g:sqh_results_limit
-    call mysql#ExecuteCommand(query)
+    call sqhell#ExecuteCommand(query)
 endfunction
 
 function! mysql#ShowDatabases()
@@ -63,12 +63,6 @@ function! mysql#DropDatabase(database, show)
 endfunction
 
 "TODO - Is platform agnostic and should not be inthe mysql file.
-"Inserts SQL results into a new temporary buffer"
-function! mysql#ExecuteCommand(command)
-    call sqhell#InsertResultsToNewBuffer('SQHResult', mysql#GetResultsFromQuery(a:command))
-endfunction
-
-"TODO - Is platform agnostic and should not be inthe mysql file.
 function! mysql#ExecuteBlock() range
     "TODO extract the block selection out so we can test it
     let previous_register_content = @"
@@ -76,13 +70,7 @@ function! mysql#ExecuteBlock() range
     let query = @"
     "Restore whatever was in here back to normal
     let @" = previous_register_content
-    call mysql#ExecuteCommand(query)
-endfunction
-
-"TODO - Is platform agnostic and should not be inthe mysql file.
-"Execute the current line
-function! mysql#ExecuteLine()
-    call mysql#ExecuteCommand(getline('.'))
+    call sqhell#ExecuteCommand(query)
 endfunction
 
 "TODO - Is platform agnostic and should not be inthe mysql file.
@@ -95,5 +83,5 @@ function! mysql#ExecuteFile(...)
     endif
 
     let file_content = join(readfile(_file), "\n")
-    call mysql#ExecuteCommand(file_content)
+    call sqhell#ExecuteCommand(file_content)
 endfunction
