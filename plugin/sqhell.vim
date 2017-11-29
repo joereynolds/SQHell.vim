@@ -16,3 +16,4 @@ command! -nargs=0 SQHExecuteLine execute ":call " . g:sqh_provider . "#ExecuteLi
 command! -range -nargs=0 SQHExecuteBlock execute "<line1>,<line2>:call " . g:sqh_provider . "#ExecuteBlock()"
 command! -nargs=1 SQHSwitchConnection :call sqhell#SwitchConnection(<q-args>)
 command! -nargs=1 SQHDropDatabase :call mysql#DropDatabase(<q-args>, 0)
+command! -nargs=+ SQHDropTableFromDatabase :call mysql#DropTableFromDatabase(<f-args>, 0)
