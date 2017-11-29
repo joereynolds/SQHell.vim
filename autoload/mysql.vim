@@ -92,17 +92,6 @@ function! mysql#DropTableFromDatabase(database, table, show)
     endif
 endfunction
 
-"TODO - Is platform agnostic and should not be inthe mysql file.
-function! mysql#ExecuteBlock() range
-    "TODO extract the block selection out so we can test it
-    let previous_register_content = @"
-    silent! execute a:firstline . ',' . a:lastline . 'y'
-    let query = @"
-    "Restore whatever was in here back to normal
-    let @" = previous_register_content
-    call sqhell#ExecuteCommand(query)
-endfunction
-
 "Each provider may paste some extra
 "crap that is irrelevant to us
 "Use this function to customise

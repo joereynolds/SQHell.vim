@@ -19,6 +19,16 @@ function! sqhell#ExecuteLine()
     call sqhell#ExecuteCommand(getline('.'))
 endfunction
 
+function! sqhell#ExecuteBlock() range
+    "TODO extract the block selection out so we can test it
+    let previous_register_content = @"
+    silent! execute a:firstline . ',' . a:lastline . 'y'
+    let query = @"
+    "Restore whatever was in here back to normal
+    let @" = previous_register_content
+    call sqhell#ExecuteCommand(query)
+endfunction
+
 "Execute the given file
 function! sqhell#ExecuteFile(...)
     let _file = get(a:, 1)
