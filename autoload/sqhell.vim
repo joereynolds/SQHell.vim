@@ -58,3 +58,20 @@ function! sqhell#InsertResultsToNewBuffer(local_filetype, query_results)
     setlocal nowrap
     execute 'setlocal filetype=' . a:local_filetype
 endfunction
+
+function! sqhell#GetColumnName()
+    let savecurpos = getcurpos()
+    call cursor(1, savecurpos[2])
+    let attr = expand('<cword>')
+    call setpos('.', savecurpos)
+    return attr
+endfunction
+
+function! sqhell#GetTableName()
+    let savewin = winnr()
+    wincmd p
+    let table = expand('<cword>')
+    let db = mysql#GetDatabaseName()
+    execute savewin . "wincmd w"
+    return [table, db]
+endfunction

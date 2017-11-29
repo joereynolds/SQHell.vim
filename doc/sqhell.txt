@@ -166,7 +166,14 @@ SQHDatabase                                                  *sqhell-sqhdatabase
 
     `dd` - Drop the database.
 
-         Note this reloads the current SQHDatabase buffer
+        Note this reloads the current SQHDatabase buffer
+
+
+SQHResult                                                      *sqhell-sqhresult*
+
+    `dd` - Delete the selected row.
+
+        Note this reloads the current SQHResult buffer
 
 
 vim:tw=78:ts=8:ft=help:norl:
