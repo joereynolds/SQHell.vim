@@ -120,6 +120,6 @@ function! mysql#DeleteRow(row)
         call mysql#GetResultsFromQuery('DELETE FROM ' . db . '.' . table . ' WHERE ' . attr . '=' . "\'" . a:row . "\'")
         :bd
         let query = 'SELECT * FROM ' . db . '.' . table . ' LIMIT ' . g:sqh_results_limit
-        call mysql#ExecuteCommand(query)
+        call sqhell#ExecuteCommand(query)
     endif
 endfunction

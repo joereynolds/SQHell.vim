@@ -63,6 +63,10 @@ function! sqhell#GetColumnName()
     let savecurpos = getcurpos()
     call cursor(1, savecurpos[2])
     let attr = expand('<cword>')
+    if(attr =~ "^\+-")
+        call cursor(2, savecurpos[2])
+        let attr = expand('<cword>')
+    endif
     call setpos('.', savecurpos)
     return attr
 endfunction
@@ -71,7 +75,8 @@ function! sqhell#GetTableName()
     let savewin = winnr()
     wincmd p
     let table = expand('<cword>')
-    let db = mysql#GetDatabaseName()
+    let tmp_db = mysql#GetDatabaseName()
+    let db = substitute(tmp_db, '^\s*\(.\{-}\)\s*$', '\1', '')
     execute savewin . "wincmd w"
     return [table, db]
 endfunction
