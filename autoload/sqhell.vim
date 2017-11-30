@@ -65,10 +65,33 @@ function! sqhell#GetColumnName()
     let attr = expand('<cword>')
     if(attr =~ "^\+-")
         call cursor(2, savecurpos[2])
-        let attr = expand('<cword>')
     endif
+    let start = col('.')
+    if(getline('.')[col('.')-1] != '|')
+        normal F|
+        let start = col('.')
+    endif
+    normal f|
+    let end = col('.')-2
+    let attr = getline('.')[start:end]
+    let attr = substitute(attr, '^\s*\(.\{-}\)\s*$', '\1', '')
     call setpos('.', savecurpos)
     return attr
+endfunction
+
+function! sqhell#GetColumnValue()
+    let savecurpos = getcurpos()
+    let start = col('.')
+    if(getline('.')[start-1] != '|')
+        normal F|
+        let start = col('.')
+    endif
+    normal f|
+    let end = col('.')-2
+    let val = getline('.')[start:end]
+    let val = substitute(val, '^\s*\(.\{-}\)\s*$', '\1', '')
+    call setpos('.', savecurpos)
+    return val
 endfunction
 
 function! sqhell#GetTableName()

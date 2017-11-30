@@ -106,18 +106,19 @@ endfunction
 "in a SQHResult buffer
 "Arguments:
 " - row: string, the where condition for deleting
-function! mysql#DeleteRow(row)
+function! mysql#DeleteRow()
+    let row = sqhell#GetColumnValue()
     let attr = sqhell#GetColumnName()
     let list = sqhell#GetTableName()
     let table = list[0]
     let db = list[1]
     if(!g:i_like_to_live_life_dangerously)
-        let prompt = confirm('Do you really want to delete all table rows where column ' . attr . '=' . a:row . ' in ' . db . '.' . table . '?', "&Yes\n&No", 2)
+        let prompt = confirm('Do you really want to delete all table rows where column ' . attr . '=' . "\'" . row . "\'" . ' in ' . db . '.' . table . '?', "&Yes\n&No", 2)
     else
         let prompt = 1
     endif
     if(prompt == 1)
-        call mysql#GetResultsFromQuery('DELETE FROM ' . db . '.' . table . ' WHERE ' . attr . '=' . "\'" . a:row . "\'")
+        call mysql#GetResultsFromQuery('DELETE FROM ' . db . '.' . table . ' WHERE ' . attr . '=' . "\'" . row . "\'")
         :bd
         let query = 'SELECT * FROM ' . db . '.' . table . ' LIMIT ' . g:sqh_results_limit
         call sqhell#ExecuteCommand(query)
