@@ -17,5 +17,6 @@ endfunction
 
 function! psql#PostBufferFormat()
     normal ggdd
+    normal Gdkgg
 endfunction
 
