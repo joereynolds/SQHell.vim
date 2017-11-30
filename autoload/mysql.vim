@@ -123,39 +123,3 @@ function! mysql#DeleteRow(row)
         call mysql#ExecuteCommand(query)
     endif
 endfunction
-
-"TODO - Is platform agnostic and should not be inthe mysql file.
-"Inserts SQL results into a new temporary buffer"
-function! mysql#ExecuteCommand(command)
-    call sqhell#InsertResultsToNewBuffer('SQHResult', mysql#GetResultsFromQuery(a:command))
-endfunction
-
-"TODO - Is platform agnostic and should not be inthe mysql file.
-function! mysql#ExecuteBlock() range
-    "TODO extract the block selection out so we can test it
-    let previous_register_content = @"
-    silent! execute a:firstline . ',' . a:lastline . 'y'
-    let query = @"
-    "Restore whatever was in here back to normal
-    let @" = previous_register_content
-    call mysql#ExecuteCommand(query)
-endfunction
-
-"TODO - Is platform agnostic and should not be inthe mysql file.
-"Execute the current line
-function! mysql#ExecuteLine()
-    call mysql#ExecuteCommand(getline('.'))
-endfunction
-
-"TODO - Is platform agnostic and should not be inthe mysql file.
-"Execute the given file
-function! mysql#ExecuteFile(...)
-    let _file = get(a:, 1)
-
-    if a:1 == ''
-        let _file = expand('%:p')
-    endif
-
-    let file_content = join(readfile(_file), "\n")
-    call mysql#ExecuteCommand(file_content)
-endfunction
