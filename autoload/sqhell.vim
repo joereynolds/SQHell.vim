@@ -34,10 +34,11 @@ function! sqhell#ExecuteFile(...)
     let _file = get(a:, 1)
 
     if a:1 == ''
-        let _file = expand('%:p')
+        let file_content = join(getline(1, '$'))
+    else
+        let file_content = join(readfile(_file), "\n")
     endif
 
-    let file_content = join(readfile(_file), "\n")
     call sqhell#ExecuteCommand(file_content)
 endfunction
 
