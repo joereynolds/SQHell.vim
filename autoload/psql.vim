@@ -15,6 +15,14 @@ function! psql#ShowDatabases()
     call sqhell#InsertResultsToNewBuffer('SQHDatabase', psql#GetResultsFromQuery(db_query))
 endfunction
 
+function! psql#SortResults(sort_options)
+    let cursor_pos = getpos('.')
+    let line_until_cursor = getline('.')[:cursor_pos[2]]
+    let sort_column = len(substitute(line_until_cursor, '[^|]', '', 'g')) + 1
+    exec '3,$!sort -k ' . sort_column . ' -t \| ' . a:sort_options
+    call setpos('.', cursor_pos)
+endfunction
+
 function! psql#PostBufferFormat()
     normal ggdd
     normal Gdkgg
