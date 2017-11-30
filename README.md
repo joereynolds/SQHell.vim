@@ -73,6 +73,13 @@ i.e. `SQHSwitchConnection live`
 I **strongly** suggest that the above configuration details are kept *outside*
 of version control and gitignored in your global gitignore.
 
+## Default Keybindings
+
+Press `s` to sort results by the column the cursor is on
+Press `S` to sort results by the column the cursor is on (in reverse)
+
+For more sorting options, you can use `:SQHSortResults` with extra arguments for the unix sort command, a la `:SQHSortResults '-rn'`. It will always sort by the column the cursor is located on.
+
 ## Contributing
 
 Please see the [Contributing guidelines](CONTRIBUTING.md) if you would like to make SQHell even better!
