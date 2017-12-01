@@ -15,8 +15,7 @@ SQHShowDatabases
 SQHShowTablesForDatabase
 SQHExecuteFile
 SQHExecuteCommand
-SQHExecuteLine
-SQHExecuteBlock
+SQHExecute
 SQHSwitchConnection
 SQHDropDatabase
 SQHDropTableFromDatabase

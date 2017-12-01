@@ -107,20 +107,13 @@ SQHExecuteCommand                                        *sqhell-execute-command
     Executes a given command as an SQL statement.
     It is case insensitive and you shouldn't quote the query.
 
-SQHExecuteBlock                                            *sqhell-execute-block*
+SQHExecute                                                       *sqhell-execute*
 
     Arguments: none
-    Example: SQHExecuteBlock
+    Example: SQHExecute
 
-    Executes the contents of the current visual selection as an SQL statement
-
-SQHExecuteLine                                             *sqhell-execute-line*
-
-    Arguments: none
-    Example: SQHExecuteLine
-
-    Executes the contents of the current line your cursor
-    is on as an SQL statement
+    Executes the line under the cursor.
+    If there is a visual selection, it will execute the selection instead.
 
 SQHSwitchConnection                                   *sqhell-switch-connection*
 
@@ -129,6 +122,13 @@ SQHSwitchConnection                                   *sqhell-switch-connection*
 
     Switches the connection details to the given host specified
     in g:sqh_connections
+
+SQHSortResults                                                *sqh-sort-results*
+
+    Arguments: arguments for unix sort command
+    Example: SQHSortResults -rn
+
+    Sorts results by the column the cursor is currently located on.
 
 
 ===============================================================================
@@ -142,7 +142,7 @@ Where possible the mappings available try to stick to Vim's semantics.
 SQHTable                                                        *sqhell-sqhtable*
     The SQHTable view lists all tables for a given database.
 
-    `e` - Edit the table. 
+    `e` - Edit the table.
         It will SELECT `g:sqh_results_limit` results from the table and display
         them to you.
 
@@ -174,6 +174,17 @@ SQHResult                                                      *sqhell-sqhresult
     `dd` - Delete the selected row.
 
         Note this reloads the current SQHResult buffer
+
+
+SQHResult                                                         *sqh-sqhresult*
+
+    `s` - Sort results by the column the cursor is on
+
+        Equivalent to `:SQHSortResults -f`
+
+    `S` - Sort results by the column the cursor is on (in reverse)
+
+        Equivalent to `:SQHSortResults -fr`
 
 
 vim:tw=78:ts=8:ft=help:norl:

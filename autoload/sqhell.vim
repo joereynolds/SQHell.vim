@@ -15,18 +15,14 @@ function! sqhell#ExecuteCommand(command)
     execute "call sqhell#InsertResultsToNewBuffer('SQHResult', " . g:sqh_provider . "#GetResultsFromQuery(a:command))"
 endfunction
 
-function! sqhell#ExecuteLine()
-    call sqhell#ExecuteCommand(getline('.'))
-endfunction
-
-function! sqhell#ExecuteBlock() range
+function! sqhell#Execute() range
     "TODO extract the block selection out so we can test it
-    let previous_register_content = @"
+    let l:previous_register_content = @"
     silent! execute a:firstline . ',' . a:lastline . 'y'
-    let query = @"
+    let l:query = @"
     "Restore whatever was in here back to normal
-    let @" = previous_register_content
-    call sqhell#ExecuteCommand(query)
+    let @" = l:previous_register_content
+    call sqhell#ExecuteCommand(l:query)
 endfunction
 
 "Execute the given file
