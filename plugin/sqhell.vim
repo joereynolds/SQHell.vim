@@ -9,7 +9,7 @@ let g:sqh_results_limit = get(g:, 'sqh_results_limit', 100)
 let g:i_like_to_live_life_dangerously = get(g:, 'i_like_to_live_life_dangerously', 0)
 
 command! -nargs=0 SQHShowDatabases execute "call " . g:sqh_provider . "#ShowDatabases()"
-command! -nargs=1 SQHShowTablesForDatabase execute "call " . g:sqh_provider . "#ShowTablesForDatabase(<q-args>)"
+command! -nargs=1 SQHShowTablesForDatabase execute "call " . g:sqh_provider . "#ShowTablesForDatabase('" . <q-args> . "')"
 command! -nargs=? SQHExecuteFile call sqhell#ExecuteFile(<q-args>)
 command! -nargs=* SQHExecuteCommand call sqhell#ExecuteCommand(<q-args>)
 command! -nargs=0 SQHExecuteLine call  sqhell#ExecuteLine()
