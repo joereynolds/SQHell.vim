@@ -133,7 +133,7 @@ SQHSwitchConnection                                   *sqhell-switch-connection*
 SQHSortResults                                                *sqh-sort-results*
 
     Arguments: arguments for unix sort command
-    Example: SQHSortResults '-rn'
+    Example: SQHSortResults -rn
 
     Sorts results by the column the cursor is currently located on.
 
@@ -180,11 +180,11 @@ SQHResult                                                         *sqh-sqhresult
 
     `s` - Sort results by the column the cursor is on
 
-        Equivalent to `:SQHSortResults '-f'`
+        Equivalent to `:SQHSortResults -f`
 
     `S` - Sort results by the column the cursor is on (in reverse)
 
-        Equivalent to `:SQHSortResults '-fr'`
+        Equivalent to `:SQHSortResults -fr`
 
 
 vim:tw=78:ts=8:ft=help:norl:

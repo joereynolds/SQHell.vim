@@ -1,3 +1,3 @@
 " nnoremap <buffer> dd :echo 'Deletions would happen here'
-nnoremap <buffer> s :SQHSortResults '-f'<CR>
-nnoremap <buffer> S :SQHSortResults '-fr'<CR>
+nnoremap <buffer> <silent> s :SQHSortResults -f<CR>
+nnoremap <buffer> <silent> S :SQHSortResults -fr<CR>
