@@ -54,3 +54,48 @@ function! sqhell#InsertResultsToNewBuffer(local_filetype, query_results)
     setlocal nowrap
     execute 'setlocal filetype=' . a:local_filetype
 endfunction
+
+function! sqhell#GetColumnName()
+    let savecurpos = getcurpos()
+    call cursor(1, savecurpos[2])
+    let attr = expand('<cword>')
+    if(attr =~ "^\+-")
+        call cursor(2, savecurpos[2])
+    endif
+    let start = col('.')
+    if(getline('.')[col('.')-1] != '|')
+        normal F|
+        let start = col('.')
+    endif
+    normal f|
+    let end = col('.')-2
+    let attr = getline('.')[start:end]
+    let attr = substitute(attr, '^\s*\(.\{-}\)\s*$', '\1', '')
+    call setpos('.', savecurpos)
+    return attr
+endfunction
+
+function! sqhell#GetColumnValue()
+    let savecurpos = getcurpos()
+    let start = col('.')
+    if(getline('.')[start-1] != '|')
+        normal F|
+        let start = col('.')
+    endif
+    normal f|
+    let end = col('.')-2
+    let val = getline('.')[start:end]
+    let val = substitute(val, '^\s*\(.\{-}\)\s*$', '\1', '')
+    call setpos('.', savecurpos)
+    return val
+endfunction
+
+function! sqhell#GetTableName()
+    let savewin = winnr()
+    wincmd p
+    let table = expand('<cword>')
+    let tmp_db = mysql#GetDatabaseName()
+    let db = substitute(tmp_db, '^\s*\(.\{-}\)\s*$', '\1', '')
+    execute savewin . "wincmd w"
+    return [table, db]
+endfunction
