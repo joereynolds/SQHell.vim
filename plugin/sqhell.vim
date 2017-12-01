@@ -16,3 +16,4 @@ command! -range -nargs=0 SQHExecute <line1>,<line2>:call sqhell#Execute()
 command! -nargs=1 SQHSwitchConnection call sqhell#SwitchConnection(<q-args>)
 command! -nargs=1 SQHDropDatabase execute ":call " . g:sqh_provider . "#DropDatabase(<q-args>, 0)"
 command! -nargs=+ SQHDropTableFromDatabase execute ":call " . g:sqh_provider . "#DropTableFromDatabase(<f-args>, 0)"
+command! -nargs=* SQHSortResults execute ':call ' . g:sqh_provider . '#SortResults(<f-args>)'
