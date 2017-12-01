@@ -23,11 +23,15 @@ MySql has the most features, there is basic support for Postgres which is being 
 
 ![](https://i.imgur.com/67nONqC.gif)
 
-### Execute a line using `SQHExecuteLine`
+### Execute a line using `SQHExecute`
+
+(Gif is outdated, new one coming soon)
 
 ![](https://i.imgur.com/j3m62am.gif)
 
-### Execute a block using `SQHExecuteBlock`
+### Execute a block using `SQHExecute` over a visual selection
+
+(Gif is outdated, new one coming soon)
 
 ![](https://i.imgur.com/40uCqVI.gif)
 
