@@ -12,7 +12,7 @@ symfony.gig WHERE
 YEAR(date) > 2017
 
 -- Run the following commands
--- SQHExecuteCommand SELECT * FROM symfony.gig
+-- SQHExecute! SELECT * FROM symfony.gig
 -- SQHShowDatabases
 
 -- Run this entire file with

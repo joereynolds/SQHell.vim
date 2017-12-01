@@ -1,8 +1,8 @@
 function! sqhell#SwitchConnection(connection)
-    let valid_connections = keys(g:sqh_connections)
+    let l:valid_connections = keys(g:sqh_connections)
 
-    if index(valid_connections, a:connection) == -1
-        echom '[SQHELL] host must be one of [' . join(valid_connections, ', ') . ']'
+    if index(l:valid_connections, a:connection) == -1
+        echom '[SQHELL] host must be one of [' . join(l:valid_connections, ', ') . ']'
         return
     endif
 
@@ -15,8 +15,13 @@ function! sqhell#ExecuteCommand(command)
     execute "call sqhell#InsertResultsToNewBuffer('SQHResult', " . g:sqh_provider . "#GetResultsFromQuery(a:command))"
 endfunction
 
-function! sqhell#Execute() range
+function! sqhell#Execute(command, bang) range
     "TODO extract the block selection out so we can test it
+
+    if a:bang == 1
+        return sqhell#ExecuteCommand(a:command)
+    endif
+
     let l:previous_register_content = @"
     silent! execute a:firstline . ',' . a:lastline . 'y'
     let l:query = @"

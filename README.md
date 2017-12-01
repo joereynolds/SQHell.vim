@@ -15,7 +15,9 @@ MySql has the most features, there is basic support for Postgres which is being 
 ## Examples
 
 (Gifs are using the data from my punk rock band [bogans](http://bogans.uk))
-### Execute a command using `SQHExecuteCommand`
+### Execute a command using `SQHExecute!`
+
+(Gif is outdated, new one coming soon)
 
 ![](https://i.imgur.com/AUEhN2C.gif)
 
