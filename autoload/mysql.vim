@@ -96,7 +96,10 @@ function! mysql#SortResults(sort_options)
     let cursor_pos = getpos('.')
     let line_until_cursor = getline('.')[:cursor_pos[2]]
     let sort_column = len(substitute(line_until_cursor, '[^|]', '', 'g'))
-    exec '4,$!sort -k ' . sort_column . ' -t \| ' . a:sort_options
+    if sort_column == 0
+      let sort_column = 1
+    endif
+    exec '4,$-1!sort -k ' . sort_column . ' -t \| ' . a:sort_options
     call setpos('.', cursor_pos)
 endfunction
 
