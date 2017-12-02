@@ -13,8 +13,10 @@ The supported providers at the moment are
 ### Execute a command using `SQHExecute!`
 
 Execute a line with `SQHExecute`.
-Execute a visual block with `SQHExecute` over a visual selection
-Execute an arbitrary command with `SQHExecute!`
+
+Execute a visual block with `SQHExecute` over a visual selection.
+
+Execute an arbitrary command with `SQHExecute!`.
 
 ![](https://i.imgur.com/osjpU6u.gif)
 
@@ -78,14 +80,17 @@ These are SQHDatabase, SQHTable, and SQHResult
 
 Inside an SQHDatabase you can press the following
 
-`dd` - Drop the database (don't worry there's a prompt)
-`e` - To see all the tables in that database. This will open an SQHTable buffer
+`dd` - Drop the database (don't worry there's a prompt).
+
+`e` - To see all the tables in that database. This will open an SQHTable buffer.
+
 
 ### SQHTable
 
 Inside an SQHDatabase you can press the following
 
-`dd` - Drop the table (don't worry there's a prompt)
+`dd` - Drop the table (don't worry there's a prompt).
+
 `e` - To see all the results for that table with a limit of `g:sqh_results_limit`.
       This will open an SQHResult buffer
 
@@ -93,9 +98,11 @@ Inside an SQHDatabase you can press the following
 
 Inside an SQHResult you can press the following
 
-`s` to sort results by the column the cursor is on
-`S` to sort results by the column the cursor is on (in reverse)
-`dd` to delete the row WHERE the column is the value under the cursor (don't worry... there's a prompt)
+`s` to sort results by the column the cursor is on.
+
+`S` to sort results by the column the cursor is on (in reverse).
+
+`dd` to delete the row WHERE the column is the value under the cursor (don't worry... there's a prompt).
 
 
 For more sorting options, you can use `:SQHSortResults` with extra arguments for the unix sort command, a la `:SQHSortResults -rn`. It will always sort by the column the cursor is located on.
