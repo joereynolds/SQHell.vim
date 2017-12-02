@@ -26,9 +26,6 @@ Execute an arbitrary command with `SQHExecute!`.
 
 ![](https://i.imgur.com/67nONqC.gif)
 
-![](https://i.imgur.com/j3m62am.gif)
-
-
 ### Explore the database with buffer aware mappings
 
 ![](https://i.imgur.com/E12LHnA.gif)
