@@ -108,7 +108,7 @@ And yes, I plan to improve this.
 ## What about dbext, vim-sql-workbench and others?
 
 DBExt is very featureful (and very good) but comes in at a whopping 12000 lines
-of code. By contrast SQHell.vim is a mere ~100 lines
+of code. By contrast SQHell.vim is a mere ~200 lines
 
 The setup and installation process for vim-sql-workbench is something that I
 aim to avoid with SQHell.vim, ideally a 'set and forget' plugin.

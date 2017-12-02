@@ -1,12 +1,12 @@
 function! mysql#GetResultsFromQuery(command)
-    let user = g:sqh_connections[g:sqh_connection]['user']
-    let password = g:sqh_connections[g:sqh_connection]['password']
-    let host = g:sqh_connections[g:sqh_connection]['host']
+    let l:user = g:sqh_connections[g:sqh_connection]['user']
+    let l:password = g:sqh_connections[g:sqh_connection]['password']
+    let l:host = g:sqh_connections[g:sqh_connection]['host']
 
-    let connection_details = 'mysql --unbuffered -u' . user . ' -p' . password . ' -h' . host
-    let system_command = connection_details . " --table -e " . shellescape(a:command)
-    let query_results = system(system_command)
-    return query_results
+    let l:connection_details = 'mysql --unbuffered -u' . l:user . ' -p' . l:password . ' -h' . l:host
+    let l:system_command = l:connection_details . ' --table -e ' . shellescape(a:command)
+    let l:query_results = system(l:system_command)
+    return l:query_results
 endfunction
 
 "Tables_in_users_table => users_table"
@@ -27,9 +27,9 @@ endfunction
 
 "This is ran when we press 'e' on an SQHTable buffer
 function! mysql#ShowRecordsInTable(table)
-    let db = mysql#GetDatabaseName()
-    let query = 'SELECT * FROM ' . db . '.' . a:table . ' LIMIT ' . g:sqh_results_limit
-    call sqhell#ExecuteCommand(query)
+    let l:db = mysql#GetDatabaseName()
+    let l:query = 'SELECT * FROM ' . l:db . '.' . a:table . ' LIMIT ' . g:sqh_results_limit
+    call sqhell#ExecuteCommand(l:query)
 endfunction
 
 function! mysql#ShowDatabases()
@@ -70,8 +70,8 @@ endfunction
 " - table: string, the table name
 " - show: boolean, show databases?
 function! mysql#DropTableSQHTableBuf(table, show)
-    let db = mysql#GetDatabaseName()
-    call mysql#DropTableFromDatabase(db, a:table, a:show)
+    let l:db = mysql#GetDatabaseName()
+    call mysql#DropTableFromDatabase(l:db, a:table, a:show)
 endfunction
 
 "Drops table

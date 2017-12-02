@@ -60,6 +60,19 @@ function! sqhell#InsertResultsToNewBuffer(local_filetype, query_results)
     execute 'setlocal filetype=' . a:local_filetype
 endfunction
 
+"Proxies to the provider of choice
+function! sqhell#ShowTablesForDatabase(database)
+    execute 'call ' . g:sqh_provider . '#ShowTablesForDatabase("' . a:database.'")'
+endfunction
+
+function! sqhell#ShowRecordsInTable(table)
+    execute 'call ' . g:sqh_provider . '#ShowRecordsInTable("' . a:table .'")'
+endfunction
+
+function! sqhell#DescribeTable(table)
+    execute 'call ' . g:sqh_provider . '#DescribeTable("' . a:table .'")'
+endfunction
+
 function! sqhell#GetColumnName()
     let savecurpos = getcurpos()
     call cursor(1, savecurpos[2])
