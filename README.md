@@ -1,41 +1,31 @@
 # SQHell.vim
 
 An SQL wrapper for Vim.
-Currently you can:
+Execute commands, sort results, navigate tables and databases and so much more!
 
-- View tables
-- View databases
-- Describe tables
-- Execute arbitrary commands
-- View records from a table interactively
-
-NOTE:
-MySql has the most features, there is basic support for Postgres which is being worked on...
+The supported providers at the moment are 
+- MySQL
+- Postgres 
 
 ## Examples
 
 (Gifs are using the data from my punk rock band [bogans](http://bogans.uk))
 ### Execute a command using `SQHExecute!`
 
-(Gif is outdated, new one coming soon)
+Execute a line with `SQHExecute`.
+Execute a visual block with `SQHExecute` over a visual selection
+Execute an arbitrary command with `SQHExecute!`
 
-![](https://i.imgur.com/AUEhN2C.gif)
+![](https://i.imgur.com/osjpU6u.gif)
 
 ### Execute a file using `SQHExecuteFile`
 
+`SQHExecuteFile` will work on the current buffer if no file is supplied
+
 ![](https://i.imgur.com/67nONqC.gif)
-
-### Execute a line using `SQHExecute`
-
-(Gif is outdated, new one coming soon)
 
 ![](https://i.imgur.com/j3m62am.gif)
 
-### Execute a block using `SQHExecute` over a visual selection
-
-(Gif is outdated, new one coming soon)
-
-![](https://i.imgur.com/40uCqVI.gif)
 
 ### Explore the database with buffer aware mappings
 
@@ -81,8 +71,32 @@ of version control and gitignored in your global gitignore.
 
 ## Default Keybindings
 
-Press `s` to sort results by the column the cursor is on
-Press `S` to sort results by the column the cursor is on (in reverse)
+SQHell creates 3 filetypes to make navigation a nicer experience.
+These are SQHDatabase, SQHTable, and SQHResult
+
+### SQHDatabase
+
+Inside an SQHDatabase you can press the following
+
+`dd` - Drop the database (don't worry there's a prompt)
+`e` - To see all the tables in that database. This will open an SQHTable buffer
+
+### SQHTable
+
+Inside an SQHDatabase you can press the following
+
+`dd` - Drop the table (don't worry there's a prompt)
+`e` - To see all the results for that table with a limit of `g:sqh_results_limit`.
+      This will open an SQHResult buffer
+
+### SQHResult
+
+Inside an SQHResult you can press the following
+
+`s` to sort results by the column the cursor is on
+`S` to sort results by the column the cursor is on (in reverse)
+`dd` to delete the row WHERE the column is the value under the cursor (don't worry... there's a prompt)
+
 
 For more sorting options, you can use `:SQHSortResults` with extra arguments for the unix sort command, a la `:SQHSortResults -rn`. It will always sort by the column the cursor is located on.
 
