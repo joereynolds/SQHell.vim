@@ -1,0 +1,22 @@
+Execute (test results buffer sets the correct filetype):
+  call sqhell#InsertResultsToNewBuffer('testType', '')
+  AssertEqual 'testType', &filetype
+
+Execute (test results buffer has correct buffer local settings):
+  call sqhell#InsertResultsToNewBuffer('testType', '')
+  AssertEqual 'hide', &bufhidden
+  AssertEqual 'nofile', &buftype
+
+Execute (test a warning is echoed if we set an invalid host):
+  let previous_content = @a
+
+  redir @a
+  call sqhell#SwitchConnection('pleb')
+  redir end
+
+  "join and split to remove the cruddy \n's"
+  let last_message = join(split(@a,"\n"))
+  let @a = previous_content
+
+  "vader doesn't have AssertMatch so just test the first N chars"
+  AssertEqual '[SQHELL] host must be one', last_message[0:24]

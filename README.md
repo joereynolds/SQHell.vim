@@ -110,18 +110,9 @@ Please see the [Contributing guidelines](CONTRIBUTING.md) if you would like to m
 
 ## Tests
 
+Tests use [vader](https://github.com/junegunn/vader.vim)`.
 Tests are housed in the `test` directory and can be ran by
-`vim`ing into the test file and then sourcing the file
-
-i.e.
-
-```
-vim test/test_results_buffer.vim
-:so %
-```
-
-If all tests pass, the `v:errors` array will be empty.
-And yes, I plan to improve this.
+`vim`ing into the test file and running `:Vader`.
 
 ## What about dbext, vim-sql-workbench and others?
 
