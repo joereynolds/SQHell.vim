@@ -25,3 +25,9 @@ SQHDropTableFromDatabase
   won't have to manually test them
 - Add Documentation for what you have added
 - Submit the pr
+
+## Guidelines
+
+- Use `normal!` not `normal` to avoid possible mapping conflicts.
+- Use `nnoremap` not `nmap` to avoid possible mapping conflicts.
+- Use the full name of a vim command where possible, i.e. `setlocal` not `setl`
