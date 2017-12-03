@@ -176,9 +176,6 @@ SQHResult                                                      *sqhell-sqhresult
 
         Note this reloads the current SQHResult buffer
 
-
-SQHResult                                                         *sqh-sqhresult*
-
     `s` - Sort results by the column the cursor is on
 
         Equivalent to `:SQHSortResults -f`
@@ -186,6 +183,14 @@ SQHResult                                                         *sqh-sqhresult
     `S` - Sort results by the column the cursor is on (in reverse)
 
         Equivalent to `:SQHSortResults -fr`
+
+    `e` - Edit current table row. Closes current buffer (SQHResult)
+          and opens new SQHInsert buffer in current window.
+
+
+SQHInsert                                                      *sqhell-sqhinsert*
+
+    `ZZ` - Close and save row to database.
 
 
 vim:tw=78:ts=8:ft=help:norl:

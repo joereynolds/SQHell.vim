@@ -93,9 +93,22 @@ function! sqhell#GetColumnName()
     normal f|
     let end = col('.')-2
     let attr = getline('.')[start:end]
-    let attr = substitute(attr, '^\s*\(.\{-}\)\s*$', '\1', '')
+    let attr = sqhell#TrimString(attr)
     call setpos('.', savecurpos)
     return attr
+endfunction
+
+function! sqhell#GetTableHeader()
+    call cursor(1, 1)
+    let line = getline('.')
+    if(line[0] != '|')
+        call cursor(2, 1)
+    endif
+    let line = getline('.')
+    let line = split(line, '|')
+    let line = map(line, "sqhell#TrimString(v:val)")
+    let line = join(line, ",")
+    return line
 endfunction
 
 function! sqhell#GetColumnValue()
@@ -108,7 +121,7 @@ function! sqhell#GetColumnValue()
     normal f|
     let end = col('.')-2
     let val = getline('.')[start:end]
-    let val = substitute(val, '^\s*\(.\{-}\)\s*$', '\1', '')
+    let val = sqhell#TrimString(val)
     call setpos('.', savecurpos)
     return val
 endfunction
@@ -118,7 +131,19 @@ function! sqhell#GetTableName()
     wincmd p
     let table = expand('<cword>')
     let tmp_db = mysql#GetDatabaseName()
-    let db = substitute(tmp_db, '^\s*\(.\{-}\)\s*$', '\1', '')
+    let db = sqhell#TrimString(tmp_db)
     execute savewin . "wincmd w"
     return [table, db]
+endfunction
+
+function! sqhell#CreateCSVFromRow(row)
+    let csv = split(a:row, "|")
+    let csv = map(csv, "sqhell#TrimString(v:val)")
+    let csv = map(csv, '"\"" . v:val . "\""')
+    let csv = join(csv, ",")
+    return csv
+endfunction
+
+function! sqhell#TrimString(str)
+    return substitute(a:str, '^\s*\(.\{-}\)\s*$', '\1', '')
 endfunction

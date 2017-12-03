@@ -136,3 +136,76 @@ function! mysql#DeleteRow()
         call sqhell#ExecuteCommand(query)
     endif
 endfunction
+
+function! mysql#EditRow()
+    let row = getline('.')
+    let csv = sqhell#CreateCSVFromRow(row)
+    let savecur = getcurpos()
+    let head = sqhell#GetTableHeader()
+    call setpos('.', savecur)
+    let list = sqhell#GetTableName()
+    let table = list[0]
+    let db = list[1]
+
+    :bd
+    new
+    let b:type = 'edit'
+    let b:prev = csv
+    let t:tabInfo = db . '.' . table
+    call append(0, head)
+    call append(1, csv)
+
+    setlocal buftype=nofile
+    setlocal bufhidden=hide
+    setlocal noswapfile
+    setlocal nowrap
+    execute 'setlocal filetype=SQHInsert'
+endfunction
+
+function! mysql#AddRow()
+    if(b:type == 'edit')
+        let query = mysql#CreateUpdateFromCSV()
+    elseif(b:type == 'insert')
+        "TODO: create insert into query
+    endif
+    if(query == 'Error')
+        return
+    endif
+    :bd
+    call mysql#GetResultsFromQuery(query)
+    call sqhell#ExecuteCommand('SELECT * FROM ' . t:tabInfo)
+    unlet t:tabInfo
+endfunction
+
+function! mysql#CreateUpdateFromCSV()
+    " Currently the csv is only 2 lines
+    " 1st: the table header (to get column names)
+    " 2nd: the row to edit
+    call cursor(1, 1)
+    let cols = getline('.')
+    let cols = split(cols, ',')
+    call cursor(2, 1)
+    let vals = getline('.')
+    let vals = split(vals, ',')
+    let b:prev = split(b:prev, ',')
+
+    if(len(cols) != len(vals))
+        echom 'Incorrect number of values.'
+        echom 'Expected: ' . len(cols) . ', got: ' . len(vals) . '.'
+        return 'Error'
+    endif
+
+    let assign = ' SET '
+    let where = ' WHERE '
+    for i in range(0,len(cols)-1)
+        if(i != 0)
+            let assign = assign . ', '
+            let where = where . ' AND '
+        endif
+        let assign = assign . cols[i] . '=' . vals[i]
+        let where = where . cols[i] . '=' . b:prev[i]
+    endfor
+
+    let query = 'UPDATE ' . t:tabInfo . assign . where
+    return query
+endfunction
