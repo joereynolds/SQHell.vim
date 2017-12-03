@@ -10,9 +10,9 @@ let g:i_like_to_live_life_dangerously = get(g:, 'i_like_to_live_life_dangerously
 
 command! -nargs=0 SQHShowDatabases execute "call " . g:sqh_provider . "#ShowDatabases()"
 command! -nargs=1 SQHShowTablesForDatabase execute "call " . g:sqh_provider . "#ShowTablesForDatabase('" . <q-args> . "')"
-command! -nargs=? SQHExecuteFile call sqhell#ExecuteFile(<q-args>)
+command! -nargs=? -complete=file SQHExecuteFile call sqhell#ExecuteFile(<q-args>)
 command! -bang -range -nargs=* SQHExecute <line1>,<line2>:call sqhell#Execute(<q-args>, <bang>0)
-command! -nargs=1 SQHSwitchConnection call sqhell#SwitchConnection(<q-args>)
+command! -nargs=1 -complete=custom,sqhell#GetHosts SQHSwitchConnection call sqhell#SwitchConnection(<q-args>)
 command! -nargs=1 SQHDropDatabase execute ":call " . g:sqh_provider . "#DropDatabase(<q-args>, 0)"
 command! -nargs=+ SQHDropTableFromDatabase execute ":call " . g:sqh_provider . "#DropTableFromDatabase(<f-args>, 0)"
 command! -nargs=* SQHSortResults execute ':call ' . g:sqh_provider . '#SortResults(<f-args>)'

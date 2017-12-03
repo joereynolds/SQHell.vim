@@ -1,3 +1,9 @@
+"This is for completion of the
+":SQHSwitchConnection command"
+function! sqhell#GetHosts(arglead, cmdline, cursorPos)
+    return join(keys(g:sqh_connections), "\n")
+endfunction
+
 function! sqhell#SwitchConnection(connection)
     let l:valid_connections = keys(g:sqh_connections)
 
@@ -16,7 +22,6 @@ function! sqhell#ExecuteCommand(command)
 endfunction
 
 function! sqhell#Execute(command, bang) range
-    "TODO extract the block selection out so we can test it
 
     if a:bang == 1
         return sqhell#ExecuteCommand(a:command)
