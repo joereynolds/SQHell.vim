@@ -147,7 +147,8 @@ function! mysql#EditRow()
     let table = list[0]
     let db = list[1]
 
-    call sqhell#InsertResultsToNewBuffer('SQHInsert', head . "\n" . csv, 0)
+    :bd
+    call sqhell#InsertResultsToNewBuffer('SQHInsert', "\n" . head . "\n" . csv, 1)
     let b:type = 'edit'
     let b:prev = csv
     let t:tabInfo = db . '.' . table
@@ -177,8 +178,12 @@ function! mysql#CreateUpdateFromCSV()
     let cols = split(cols, ',')
     call cursor(2, 1)
     let vals = getline('.')
-    let vals = split(vals, ',')
-    let b:prev = split(b:prev, ',')
+    let vals = split(vals, '"')
+    let vals = filter(vals, 'v:val != ","')
+    let vals = map(vals, '"\"" . v:val . "\""')
+    let b:prev = split(b:prev, '"')
+    let b:prev = filter(b:prev, 'v:val != ","')
+    let b:prev = map(b:prev, '"\"" . v:val . "\""')
 
     if(len(cols) != len(vals))
         echom 'Incorrect number of values.'
