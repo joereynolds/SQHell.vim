@@ -1,3 +1,12 @@
+Execute (test all expected commands are available to use):
+  AssertEqual exists(':SQHSwitchConnection'), 2
+  AssertEqual exists(':SQHShowDatabases'), 2
+  AssertEqual exists(':SQHExecute'), 2
+  AssertEqual exists(':SQHExecuteFile'), 2
+  AssertEqual exists(':SQHSortResults'), 2
+  AssertEqual exists(':SQHDropDatabase'), 2
+  AssertEqual exists(':SQHDropTableFromDatabase'), 2
+
 Execute (test results buffer sets the correct filetype):
   call sqhell#InsertResultsToNewBuffer('testType', '')
   AssertEqual 'testType', &filetype
