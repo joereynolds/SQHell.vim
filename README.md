@@ -101,6 +101,15 @@ Inside an SQHResult you can press the following
 
 `dd` to delete the row WHERE the column is the value under the cursor (don't worry... there's a prompt).
 
+`e` to edit the current row. This will open an SQHInsert buffer
+
+
+### SQHInsert
+
+Inside an SQHInsert you can press the following
+
+`ZZ` to close and save the editied row. This will reopen the previous SQHResult buffer
+
 
 For more sorting options, you can use `:SQHSortResults` with extra arguments for the unix sort command, a la `:SQHSortResults -rn`. It will always sort by the column the cursor is located on.
 
