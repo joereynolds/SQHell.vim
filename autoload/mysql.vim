@@ -22,7 +22,7 @@ endfunction
 function! mysql#DescribeTable(table)
     let db = mysql#GetDatabaseName()
     let query = 'DESCRIBE ' . db . '.' . a:table
-    call sqhell#InsertResultsToNewBuffer('SQHUnspecified', mysql#GetResultsFromQuery(query))
+    call sqhell#InsertResultsToNewBuffer('SQHUnspecified', mysql#GetResultsFromQuery(query), 1)
 endfunction
 
 "This is ran when we press 'e' on an SQHTable buffer
@@ -33,14 +33,14 @@ function! mysql#ShowRecordsInTable(table)
 endfunction
 
 function! mysql#ShowDatabases()
-    call sqhell#InsertResultsToNewBuffer('SQHDatabase', mysql#GetResultsFromQuery('SHOW DATABASES'))
+    call sqhell#InsertResultsToNewBuffer('SQHDatabase', mysql#GetResultsFromQuery('SHOW DATABASES'), 1)
 endfunction
 
 "Shows all tables for a given database
 "Can also be ran by pressing 'e' in
 "an SQHDatabase buffer
 function! mysql#ShowTablesForDatabase(database)
-    call sqhell#InsertResultsToNewBuffer('SQHTable', mysql#GetResultsFromQuery('SHOW TABLES FROM ' . a:database))
+    call sqhell#InsertResultsToNewBuffer('SQHTable', mysql#GetResultsFromQuery('SHOW TABLES FROM ' . a:database), 1)
 endfunction
 
 "Drops database at cursor
@@ -147,19 +147,10 @@ function! mysql#EditRow()
     let table = list[0]
     let db = list[1]
 
-    :bd
-    new
+    call sqhell#InsertResultsToNewBuffer('SQHInsert', head . "\n" . csv, 0)
     let b:type = 'edit'
     let b:prev = csv
     let t:tabInfo = db . '.' . table
-    call append(0, head)
-    call append(1, csv)
-
-    setlocal buftype=nofile
-    setlocal bufhidden=hide
-    setlocal noswapfile
-    setlocal nowrap
-    execute 'setlocal filetype=SQHInsert'
 endfunction
 
 function! mysql#AddRow()

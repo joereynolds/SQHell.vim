@@ -18,7 +18,7 @@ endfunction
 
 "Inserts SQL results into a new temporary buffer"
 function! sqhell#ExecuteCommand(command)
-    execute "call sqhell#InsertResultsToNewBuffer('SQHResult', " . g:sqh_provider . "#GetResultsFromQuery(a:command))"
+    execute "call sqhell#InsertResultsToNewBuffer('SQHResult', " . g:sqh_provider . "#GetResultsFromQuery(a:command), 1)"
 endfunction
 
 function! sqhell#Execute(command, bang) range
@@ -48,10 +48,12 @@ function! sqhell#ExecuteFile(...)
     call sqhell#ExecuteCommand(file_content)
 endfunction
 
-function! sqhell#InsertResultsToNewBuffer(local_filetype, query_results)
+function! sqhell#InsertResultsToNewBuffer(local_filetype, query_results, format)
     new | put =a:query_results
 
-    execute "call " . g:sqh_provider . "#PostBufferFormat()"
+    if(a:format)
+        execute "call " . g:sqh_provider . "#PostBufferFormat()"
+    endif
 
     "This prevents newline characters from literally rendering out
     "Keeping this as a comment just incase anyone decides to get
