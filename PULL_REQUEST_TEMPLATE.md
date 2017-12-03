@@ -1,6 +1,6 @@
-# Description (what is it you've done, has anything changed?)
+Description (what is it you've done, has anything changed?)
 
-# Checklist
+Checklist
 
 - [ ] I have written my code in a way that it can be easily tested
 - [ ] I have written tests for my code
