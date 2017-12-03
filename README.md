@@ -110,7 +110,8 @@ Please see the [Contributing guidelines](CONTRIBUTING.md) if you would like to m
 
 ## Tests
 
-Tests use [vader](https://github.com/junegunn/vader.vim)`.
+Tests use [vader](https://github.com/junegunn/vader.vim).
+
 Tests are housed in the `test` directory and can be ran by
 `vim`ing into the test file and running `:Vader`.
 
