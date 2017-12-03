@@ -10,6 +10,12 @@ Execute (test results buffer has correct buffer local settings):
 Execute (test a warning is echoed if we set an invalid host):
   let previous_content = @a
 
+  let g:sqh_connections = {
+      \'test': '',
+      \'another-connection': '',
+      \'live': ''
+      \}
+
   redir @a
   call sqhell#SwitchConnection('pleb')
   redir end
@@ -18,5 +24,4 @@ Execute (test a warning is echoed if we set an invalid host):
   let last_message = join(split(@a,"\n"))
   let @a = previous_content
 
-  "vader doesn't have AssertMatch so just test the first N chars"
-  AssertEqual '[SQHELL] host must be one', last_message[0:24]
+  AssertEqual '[SQHELL] host must be one of [live, another-connection, test]', last_message
