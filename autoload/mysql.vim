@@ -89,7 +89,7 @@ function! mysql#DropTableFromDatabase(database, table, show)
         call mysql#GetResultsFromQuery('DROP TABLE ' . a:database . "." . a:table)
         if(a:show)
             :bd
-            call mysql#ShowTablesForDatabase(a:database)
+            call sqhell#ShowTablesForDatabase(a:database)
         endif
     endif
 endfunction
@@ -208,4 +208,60 @@ function! mysql#CreateUpdateFromCSV()
 
     let query = 'UPDATE ' . t:tabInfo . assign . where
     return query
+endfunction
+
+function! mysql#GetTableHeader()
+    call cursor(1, 1)
+    let line = getline('.')
+    if(line[0] != '|')
+        call cursor(2, 1)
+    endif
+    let line = getline('.')
+    let line = split(line, '|')
+    let line = map(line, "sqhell#TrimString(v:val)")
+    let line = join(line, ",")
+    return line
+endfunction
+
+function! mysql#CreateCSVFromRow(row)
+    let csv = split(a:row, "|")
+    let csv = map(csv, "sqhell#TrimString(v:val)")
+    let csv = map(csv, '"\"" . v:val . "\""')
+    let csv = join(csv, ",")
+    return csv
+endfunction
+
+function! mysql#GetColumnName()
+    let savecurpos = getcurpos()
+    call cursor(1, savecurpos[2])
+    let attr = expand('<cword>')
+    if(attr =~ "^\+-")
+        call cursor(2, savecurpos[2])
+    endif
+    let start = col('.')
+    if(getline('.')[col('.')-1] != '|')
+        normal F|
+        let start = col('.')
+    endif
+    normal f|
+    let end = col('.')-2
+    let attr = getline('.')[start:end]
+    let attr = sqhell#TrimString(attr)
+    call setpos('.', savecurpos)
+    return attr
+endfunction
+
+function! mysql#GetColumnValue()
+    let savecurpos = getcurpos()
+    let start = col('.')
+    if(getline('.')[start-1] != '|')
+        normal F|
+        let start = col('.')
+    endif
+    normal f|
+    let end = col('.')-2
+    let val = getline('.')[start:end]
+    let val = sqhell#TrimString(val)
+    call setpos('.', savecurpos)
+    return val
 endfunction
