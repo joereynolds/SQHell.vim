@@ -28,6 +28,7 @@ endfunction
 "This is ran when we press 'e' on an SQHTable buffer
 function! mysql#ShowRecordsInTable(table)
     let l:db = mysql#GetDatabaseName()
+    let l:db = sqhell#TrimString(l:db)
     let l:query = 'SELECT * FROM ' . l:db . '.' . a:table . ' LIMIT ' . g:sqh_results_limit
     call sqhell#ExecuteCommand(l:query)
 endfunction
@@ -143,6 +144,7 @@ function! mysql#EditRow()
     let savecur = getcurpos()
     let head = sqhell#GetTableHeader()
     call setpos('.', savecur)
+    echo b:last_query
     " let list = sqhell#GetTableName()
     " let table = list[0]
     " let db = list[1]
@@ -152,8 +154,12 @@ function! mysql#EditRow()
     if(index != -1)
         let tmp = tmp[0:index-1]
     endif
+    let index = index(tmp, 'LIMIT')
+    if(index != -1)
+        let tmp = tmp[0:index-1]
+    endif
     let tmp = tmp[len(tmp)-1]
-    let tmp = tmp[0:len(tmp)-2]
+    " let tmp = tmp[0:len(tmp)-2]
     let tmp = split(tmp, '\.')
     let db = tmp[0]
     let table = tmp[1]
