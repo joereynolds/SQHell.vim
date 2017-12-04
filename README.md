@@ -108,7 +108,7 @@ Inside an SQHResult you can press the following
 
 Inside an SQHInsert you can press the following
 
-`ZZ` to close and save the editied row. This will reopen the previous SQHResult buffer
+`ZZ` to close and save the edited row. This will reopen the previous SQHResult buffer
 
 
 For more sorting options, you can use `:SQHSortResults` with extra arguments for the unix sort command, a la `:SQHSortResults -rn`. It will always sort by the column the cursor is located on.

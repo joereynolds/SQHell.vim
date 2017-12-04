@@ -144,10 +144,6 @@ function! mysql#EditRow()
     let savecur = getcurpos()
     let head = sqhell#GetTableHeader()
     call setpos('.', savecur)
-    echo b:last_query
-    " let list = sqhell#GetTableName()
-    " let table = list[0]
-    " let db = list[1]
     let tmp = b:last_query
     let tmp = split(tmp, ' ')
     let index = index(tmp, 'WHERE')
@@ -159,7 +155,6 @@ function! mysql#EditRow()
         let tmp = tmp[0:index-1]
     endif
     let tmp = tmp[len(tmp)-1]
-    " let tmp = tmp[0:len(tmp)-2]
     let tmp = split(tmp, '\.')
     let db = tmp[0]
     let table = tmp[1]
