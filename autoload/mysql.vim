@@ -11,9 +11,7 @@ endfunction
 
 "Tables_in_users_table => users_table"
 function! mysql#GetDatabaseName()
-    let l:savecur = getcurpos()
-    let l:raw_database = split(getline(search('Tables_in_')), 'Tables_in_')[1]
-    call setpos('.', l:savecur)
+    let l:raw_database = split(getline(2), 'Tables_in_')[1]
     let l:current_database = substitute(l:raw_database, '|', '', '')
     return l:current_database
 endfunction
