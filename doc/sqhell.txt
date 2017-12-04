@@ -49,13 +49,6 @@ the `autoload` directory.
 
 i.e. `let g:sqh_provider = 'psql'`
 
-g:i_like_to_live_life_dangerously                          *sqhell-danger-prompt*
-
-Should SQHell prompt you before executing a dangerous action?
-Set to a non-zero value to disable the prompt.
-Default is 0
-
-
 ===============================================================================
 2. Commands                                                     *sqhell-commands*
 
