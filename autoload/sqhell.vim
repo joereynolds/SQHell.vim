@@ -18,7 +18,8 @@ endfunction
 
 "Inserts SQL results into a new temporary buffer"
 function! sqhell#ExecuteCommand(command)
-    execute "call sqhell#InsertResultsToNewBuffer('SQHResult', " . g:sqh_provider . "#GetResultsFromQuery(a:command))"
+    execute "call sqhell#InsertResultsToNewBuffer('SQHResult', " . g:sqh_provider . "#GetResultsFromQuery(a:command), 1)"
+    let b:last_query = a:command
 endfunction
 
 function! sqhell#Execute(command, bang) range
@@ -48,10 +49,12 @@ function! sqhell#ExecuteFile(...)
     call sqhell#ExecuteCommand(file_content)
 endfunction
 
-function! sqhell#InsertResultsToNewBuffer(local_filetype, query_results)
+function! sqhell#InsertResultsToNewBuffer(local_filetype, query_results, format)
     new | put =a:query_results
 
-    execute "call " . g:sqh_provider . "#PostBufferFormat()"
+    if(a:format)
+        execute "call " . g:sqh_provider . "#PostBufferFormat()"
+    endif
 
     "This prevents newline characters from literally rendering out
     "Keeping this as a comment just incase anyone decides to get
@@ -79,38 +82,23 @@ function! sqhell#DescribeTable(table)
 endfunction
 
 function! sqhell#GetColumnName()
-    let savecurpos = getcurpos()
-    call cursor(1, savecurpos[2])
-    let attr = expand('<cword>')
-    if(attr =~ "^\+-")
-        call cursor(2, savecurpos[2])
-    endif
-    let start = col('.')
-    if(getline('.')[col('.')-1] != '|')
-        normal F|
-        let start = col('.')
-    endif
-    normal f|
-    let end = col('.')-2
-    let attr = getline('.')[start:end]
-    let attr = substitute(attr, '^\s*\(.\{-}\)\s*$', '\1', '')
-    call setpos('.', savecurpos)
-    return attr
+    execute 'let ret = ' . g:sqh_provider . '#GetColumnName()'
+    return ret
 endfunction
 
 function! sqhell#GetColumnValue()
-    let savecurpos = getcurpos()
-    let start = col('.')
-    if(getline('.')[start-1] != '|')
-        normal F|
-        let start = col('.')
-    endif
-    normal f|
-    let end = col('.')-2
-    let val = getline('.')[start:end]
-    let val = substitute(val, '^\s*\(.\{-}\)\s*$', '\1', '')
-    call setpos('.', savecurpos)
-    return val
+    execute 'let ret = ' . g:sqh_provider . '#GetColumnValue()'
+    return ret
+endfunction
+
+function! sqhell#CreateCSVFromRow(row)
+    execute 'let ret = ' . g:sqh_provider . '#CreateCSVFromRow(a:row)'
+    return ret
+endfunction
+
+function! sqhell#GetTableHeader()
+    execute 'let ret = ' . g:sqh_provider . '#GetTableHeader()'
+    return ret
 endfunction
 
 function! sqhell#GetTableName()
@@ -118,7 +106,11 @@ function! sqhell#GetTableName()
     wincmd p
     let table = expand('<cword>')
     let tmp_db = mysql#GetDatabaseName()
-    let db = substitute(tmp_db, '^\s*\(.\{-}\)\s*$', '\1', '')
+    let db = sqhell#TrimString(tmp_db)
     execute savewin . "wincmd w"
     return [table, db]
+endfunction
+
+function! sqhell#TrimString(str)
+    return substitute(a:str, '^\s*\(.\{-}\)\s*$', '\1', '')
 endfunction
