@@ -1,4 +1,4 @@
-Execute (test all expected commands are available to use):
+Execute (to see if all commands are available):
   AssertEqual exists(':SQHSwitchConnection'), 2
   AssertEqual exists(':SQHShowDatabases'), 2
   AssertEqual exists(':SQHExecute'), 2
@@ -7,16 +7,22 @@ Execute (test all expected commands are available to use):
   AssertEqual exists(':SQHDropDatabase'), 2
   AssertEqual exists(':SQHDropTableFromDatabase'), 2
 
-Execute (test results buffer sets the correct filetype):
+Execute (to see whether we set the correct filetype on a buffer):
   call sqhell#InsertResultsToNewBuffer('testType', '', 1)
   AssertEqual 'testType', &filetype
 
-Execute (test results buffer has correct buffer local settings):
+Execute (to see whether we set the correct buffer local settings):
   call sqhell#InsertResultsToNewBuffer('testType', '', 1)
   AssertEqual 'hide', &bufhidden
   AssertEqual 'nofile', &buftype
 
-Execute (test a warning is echoed if we set an invalid host):
+Execute (a conversion of a list to csv):
+  let expected = 'id,prefix,location,date,artist,url'
+  let test_headings = ['id', 'prefix', 'location', 'date', 'artist', 'url']
+  let actual = mysql#FormatHeadingsAsCsv(test_headings)
+  AssertEqual expected, actual
+
+Execute (to see if we echo a message when we specify an invalid host):
   let previous_content = @a
 
   let g:sqh_connections = {
@@ -34,6 +40,21 @@ Execute (test a warning is echoed if we set an invalid host):
   let @a = previous_content
 
   AssertEqual '[SQHELL] host must be one of [live, another-connection, test]', last_message
+
+
+Given SQHResult (A buffer that we will parse headings from):
+  +----+-----------------+-------------------------------------+------------+----------------------------+--------------------------------------------+
+  | id | prefix          | location                            | date       | artist                     | url                                        |
+  +----+-----------------+-------------------------------------+------------+----------------------------+--------------------------------------------+
+  |  1 | Supporting      | Mcleans Pub, Deeside, UK            | 2017-09-09 | Vice Squad                 | http://vicesquad.co.uk/punkrock/           |
+  |  2 | Supporting      | Tivoli, Buckley, UK                 | 2017-10-20 | The Sex Pistols Experience | http://www.sexpistolsexperience.co.uk/     |
+  +----+-----------------+-------------------------------------+------------+----------------------------+--------------------------------------------+
+
+Execute (extract the headings):
+  let expected = ['id', 'prefix', 'location', 'date', 'artist', 'url']
+  let actual = mysql#GetTableHeadings()
+  AssertEqual expected, actual
+
 
 Given SQHResult (A buffer in order of primary key):
   +----+-----------------+-------------------------------------+------------+----------------------------+--------------------------------------------+

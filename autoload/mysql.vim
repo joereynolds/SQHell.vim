@@ -138,7 +138,7 @@ function! mysql#EditRow()
     let row = getline('.')
     let csv = sqhell#CreateCSVFromRow(row)
     let savecur = getcurpos()
-    let head = sqhell#GetTableHeader()
+    let head = mysql#FormatHeadingsAsCsv(mysql#GetTableHeadings())
     call setpos('.', savecur)
     let tmp = split(b:last_query, ' ')
     let index = index(tmp, 'WHERE')
@@ -214,25 +214,26 @@ function! mysql#CreateUpdateFromCSV()
     return query
 endfunction
 
-function! mysql#GetTableHeader()
-    call cursor(1, 1)
-    let line = getline('.')
-    if(line[0] != '|')
-        call cursor(2, 1)
-    endif
-    let line = getline('.')
-    let line = split(line, '|')
-    let line = map(line, "sqhell#TrimString(v:val)")
-    let line = join(line, ",")
-    return line
+"Returns a list of all of the column headings in the current SQHResult
+function! mysql#GetTableHeadings()
+    call cursor(2, 1)
+    let l:line = getline('.')
+    let l:line = split(l:line, '|')
+    let l:headings= map(l:line, 'sqhell#TrimString(v:val)')
+
+    return l:headings
+endfunction
+
+function! mysql#FormatHeadingsAsCsv(headings)
+    return join(a:headings, ',')
 endfunction
 
 function! mysql#CreateCSVFromRow(row)
-    let csv = split(a:row, "|")
-    let csv = map(csv, "sqhell#TrimString(v:val)")
-    let csv = map(csv, '"\"" . v:val . "\""')
-    let csv = join(csv, ",")
-    return csv
+    let l:csv = split(a:row, '|')
+    let l:csv = map(l:csv, 'sqhell#TrimString(v:val)')
+    let l:csv = map(l:csv, '"\"" . v:val . "\""')
+    let l:csv = join(l:csv, ',')
+    return l:csv
 endfunction
 
 function! mysql#GetColumnName()
