@@ -12,7 +12,7 @@ endfunction
 "Tables_in_users_table => users_table"
 function! mysql#GetDatabaseName()
     let l:raw_database = split(getline(2), 'Tables_in_')[1]
-    let l:current_database = substitute(l:raw_database, '|', '', '')
+    let l:current_database = sqhell#TrimString(substitute(l:raw_database, '|', '', ''))
     return l:current_database
 endfunction
 
