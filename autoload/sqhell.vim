@@ -38,15 +38,13 @@ endfunction
 
 "Execute the given file
 function! sqhell#ExecuteFile(...)
-    let _file = get(a:, 1)
+    let l:file_content = join(getline(1, '$'), "\n")
 
-    if a:1 ==? ''
-        let file_content = join(getline(1, '$'))
-    else
-        let file_content = join(readfile(_file), "\n")
+    if a:1 !=? ''
+        let l:file_content = join(readfile(a:1), "\n")
     endif
 
-    call sqhell#ExecuteCommand(file_content)
+    call sqhell#ExecuteCommand(l:file_content)
 endfunction
 
 function! sqhell#InsertResultsToNewBuffer(local_filetype, query_results, format)
