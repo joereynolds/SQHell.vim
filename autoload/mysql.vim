@@ -217,11 +217,8 @@ endfunction
 "Returns a list of all of the column headings in the current SQHResult
 function! mysql#GetTableHeadings()
     call cursor(2, 1)
-    let l:line = getline('.')
-    let l:line = split(l:line, '|')
-    let l:headings= map(l:line, 'sqhell#TrimString(v:val)')
-
-    return l:headings
+    let l:line = split(getline('.'), '|')
+    return map(l:line, 'sqhell#TrimString(v:val)')
 endfunction
 
 function! mysql#FormatHeadingsAsCsv(headings)
