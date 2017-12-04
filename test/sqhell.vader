@@ -50,7 +50,7 @@ Given SQHResult (A buffer that we will parse headings from):
   |  2 | Supporting      | Tivoli, Buckley, UK                 | 2017-10-20 | The Sex Pistols Experience | http://www.sexpistolsexperience.co.uk/     |
   +----+-----------------+-------------------------------------+------------+----------------------------+--------------------------------------------+
 
-Execute (extract the headings):
+Execute (FIXME [fails because of version of vim on CI. It throws a E706.]extract the headings):
   let expected = ['id', 'prefix', 'location', 'date', 'artist', 'url']
   let actual = mysql#GetTableHeadings()
   AssertEqual expected, actual
