@@ -27,8 +27,7 @@ endfunction
 
 "This is ran when we press 'e' on an SQHTable buffer
 function! mysql#ShowRecordsInTable(table)
-    let l:db = mysql#GetDatabaseName()
-    let l:db = sqhell#TrimString(l:db)
+    let l:db = sqhell#TrimString(mysql#GetDatabaseName())
     let l:query = 'SELECT * FROM ' . l:db . '.' . a:table . ' LIMIT ' . g:sqh_results_limit
     call sqhell#ExecuteCommand(l:query)
 endfunction
@@ -51,14 +50,12 @@ endfunction
 " - database: string, the database name
 " - show: boolean, show databases?
 function! mysql#DropDatabase(database, show)
-    if(!g:i_like_to_live_life_dangerously)
-        let prompt = confirm('Do you really want to drop the database: ' . a:database . '?', "&Yes\n&No", 2)
-    else
-        let prompt = 1
-    endif
-    if(prompt == 1)
-        call mysql#GetResultsFromQuery('DROP DATABASE ' . a:database)
-        if(a:show)
+
+    let l:drop_query = 'DROP DATABASE ' . a:database
+    let prompt = confirm(sqhell#GeneratePrompt(l:drop_query), "&Yes\n&No", 2)
+    if (prompt == 1)
+        call mysql#GetResultsFromQuery(l:drop_query)
+        if (a:show)
           :bd
           call mysql#ShowDatabases()
         endif
@@ -81,13 +78,12 @@ endfunction
 " - table: string, the table name
 " - show: boolean, show databases?
 function! mysql#DropTableFromDatabase(database, table, show)
-    if(!g:i_like_to_live_life_dangerously)
-        let prompt = confirm('Do you really want to drop the table: ' . a:table . ' from the database: ' . a:database . "?", "&Yes\n&No", 2)
-    else
-        let prompt = 1
-    endif
-    if(prompt == 1)
-        call mysql#GetResultsFromQuery('DROP TABLE ' . a:database . "." . a:table)
+    let l:drop_query = 'DROP TABLE ' . sqhell#TrimString(a:database) . "." . a:table
+
+    let prompt = confirm(sqhell#GeneratePrompt(l:drop_query), "&Yes\n&No", 2)
+
+    if (prompt == 1)
+        call mysql#GetResultsFromQuery(l:drop_query)
         if(a:show)
             :bd
             call sqhell#ShowTablesForDatabase(a:database)
@@ -112,7 +108,7 @@ endfunction
 "Use this function to customise
 "the removal of said crap...
 function! mysql#PostBufferFormat()
-    normal gg"_2dd
+    normal! gg"_2dd
 endfunction
 
 "Deletes table row(s) by pressing 'dd'
@@ -125,27 +121,26 @@ function! mysql#DeleteRow()
     let list = sqhell#GetTableName()
     let table = list[0]
     let db = list[1]
-    if(!g:i_like_to_live_life_dangerously)
-        let prompt = confirm('Do you really want to delete all table rows where column ' . attr . '=' . "\'" . row . "\'" . ' in ' . db . '.' . table . '?', "&Yes\n&No", 2)
-    else
-        let prompt = 1
-    endif
-    if(prompt == 1)
-        call mysql#GetResultsFromQuery('DELETE FROM ' . db . '.' . table . ' WHERE ' . attr . '=' . "\'" . row . "\'")
+
+    let l:delete_query = 'DELETE FROM ' . db . '.' . table . ' WHERE ' . attr . '=' . "\'" . row . "\'"
+    let l:select_query = 'SELECT * FROM ' . db . '.' . table . ' LIMIT ' . g:sqh_results_limit
+    let prompt = confirm(sqhell#GeneratePrompt(l:delete_query), "&Yes\n&No", 2)
+
+    if (prompt == 1)
+        call mysql#GetResultsFromQuery(l:delete_query)
         :bd
-        let query = 'SELECT * FROM ' . db . '.' . table . ' LIMIT ' . g:sqh_results_limit
-        call sqhell#ExecuteCommand(query)
+        call sqhell#ExecuteCommand(l:select_query)
     endif
 endfunction
 
+"Called by pressing 'e' on an SQHResult buffer
 function! mysql#EditRow()
     let row = getline('.')
     let csv = sqhell#CreateCSVFromRow(row)
     let savecur = getcurpos()
     let head = sqhell#GetTableHeader()
     call setpos('.', savecur)
-    let tmp = b:last_query
-    let tmp = split(tmp, ' ')
+    let tmp = split(b:last_query, ' ')
     let index = index(tmp, 'WHERE')
     if(index != -1)
         let tmp = tmp[0:index-1]
@@ -181,6 +176,7 @@ function! mysql#AddRow()
     unlet t:tabInfo
 endfunction
 
+"Generate the update query from the edited csv style buffer
 function! mysql#CreateUpdateFromCSV()
     " Currently the csv is only 2 lines
     " 1st: the table header (to get column names)
@@ -248,10 +244,10 @@ function! mysql#GetColumnName()
     endif
     let start = col('.')
     if(getline('.')[col('.')-1] != '|')
-        normal F|
+        normal! F|
         let start = col('.')
     endif
-    normal f|
+    normal! f|
     let end = col('.')-2
     let attr = getline('.')[start:end]
     let attr = sqhell#TrimString(attr)
@@ -263,10 +259,10 @@ function! mysql#GetColumnValue()
     let savecurpos = getcurpos()
     let start = col('.')
     if(getline('.')[start-1] != '|')
-        normal F|
+        normal! F|
         let start = col('.')
     endif
-    normal f|
+    normal! f|
     let end = col('.')-2
     let val = getline('.')[start:end]
     let val = sqhell#TrimString(val)

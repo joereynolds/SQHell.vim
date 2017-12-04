@@ -40,7 +40,7 @@ endfunction
 function! sqhell#ExecuteFile(...)
     let _file = get(a:, 1)
 
-    if a:1 == ''
+    if a:1 ==? ''
         let file_content = join(getline(1, '$'))
     else
         let file_content = join(readfile(_file), "\n")
@@ -113,4 +113,9 @@ endfunction
 
 function! sqhell#TrimString(str)
     return substitute(a:str, '^\s*\(.\{-}\)\s*$', '\1', '')
+endfunction
+
+"Returns a friendly string for confirm dialogs
+function! sqhell#GeneratePrompt(query)
+    return '[SQHELL] Execute "' . a:query . '"?'
 endfunction
