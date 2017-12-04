@@ -52,7 +52,7 @@ endfunction
 function! sqhell#InsertResultsToNewBuffer(local_filetype, query_results, format)
     new | put =a:query_results
 
-    if(a:format)
+    if (a:format)
         execute "call " . g:sqh_provider . "#PostBufferFormat()"
     endif
 

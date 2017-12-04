@@ -8,11 +8,11 @@ Execute (test all expected commands are available to use):
   AssertEqual exists(':SQHDropTableFromDatabase'), 2
 
 Execute (test results buffer sets the correct filetype):
-  call sqhell#InsertResultsToNewBuffer('testType', '')
+  call sqhell#InsertResultsToNewBuffer('testType', '', 1)
   AssertEqual 'testType', &filetype
 
 Execute (test results buffer has correct buffer local settings):
-  call sqhell#InsertResultsToNewBuffer('testType', '')
+  call sqhell#InsertResultsToNewBuffer('testType', '', 1)
   AssertEqual 'hide', &bufhidden
   AssertEqual 'nofile', &buftype
 
