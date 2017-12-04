@@ -11,18 +11,18 @@ endfunction
 
 "Tables_in_users_table => users_table"
 function! mysql#GetDatabaseName()
-    let savecur = getcurpos()
-    let raw_database = split(getline(search('Tables_in_')), 'Tables_in_')[1]
-    call setpos('.', savecur)
-    let current_database = substitute(raw_database, '|', '', '')
-    return current_database
+    let l:savecur = getcurpos()
+    let l:raw_database = split(getline(search('Tables_in_')), 'Tables_in_')[1]
+    call setpos('.', l:savecur)
+    let l:current_database = substitute(l:raw_database, '|', '', '')
+    return l:current_database
 endfunction
 
 "This is ran when press 'K' on an SQHTable buffer"
 function! mysql#DescribeTable(table)
-    let db = mysql#GetDatabaseName()
-    let query = 'DESCRIBE ' . db . '.' . a:table
-    call sqhell#InsertResultsToNewBuffer('SQHUnspecified', mysql#GetResultsFromQuery(query), 1)
+    let l:db = mysql#GetDatabaseName()
+    let l:query = 'DESCRIBE ' . l:db . '.' . a:table
+    call sqhell#InsertResultsToNewBuffer('SQHUnspecified', mysql#GetResultsFromQuery(l:query), 1)
 endfunction
 
 "This is ran when we press 'e' on an SQHTable buffer
@@ -116,8 +116,8 @@ endfunction
 "Arguments:
 " - row: string, the where condition for deleting
 function! mysql#DeleteRow()
-    let row = sqhell#GetColumnValue()
-    let attr = sqhell#GetColumnName()
+    let row = mysql#GetColumnValue()
+    let attr = mysql#GetColumnName()
     let list = sqhell#GetTableName()
     let table = list[0]
     let db = list[1]
@@ -181,11 +181,8 @@ function! mysql#CreateUpdateFromCSV()
     " Currently the csv is only 2 lines
     " 1st: the table header (to get column names)
     " 2nd: the row to edit
-    call cursor(1, 1)
-    let cols = getline('.')
-    let cols = split(cols, ',')
-    call cursor(2, 1)
-    let vals = getline('.')
+    let cols = split(getline(1), ',')
+    let vals = getline(2)
     let vals = split(vals, '"')
     let vals = filter(vals, 'v:val != ","')
     let vals = map(vals, '"\"" . v:val . "\""')
@@ -193,7 +190,7 @@ function! mysql#CreateUpdateFromCSV()
     let b:prev = filter(b:prev, 'v:val != ","')
     let b:prev = map(b:prev, '"\"" . v:val . "\""')
 
-    if(len(cols) != len(vals))
+    if len(cols) != len(vals)
         echom 'Incorrect number of values.'
         echom 'Expected: ' . len(cols) . ', got: ' . len(vals) . '.'
         return 'Error'
@@ -216,8 +213,7 @@ endfunction
 
 "Returns a list of all of the column headings in the current SQHResult
 function! mysql#GetTableHeadings()
-    call cursor(2, 1)
-    let l:line = split(getline('.'), '|')
+    let l:line = split(getline(2), '|')
     return map(l:line, 'sqhell#TrimString(v:val)')
 endfunction
 
@@ -237,7 +233,7 @@ function! mysql#GetColumnName()
     let savecurpos = getcurpos()
     call cursor(1, savecurpos[2])
     let attr = expand('<cword>')
-    if(attr =~ "^\+-")
+    if attr =~ "^\+-"
         call cursor(2, savecurpos[2])
     endif
     let start = col('.')
@@ -256,7 +252,7 @@ endfunction
 function! mysql#GetColumnValue()
     let savecurpos = getcurpos()
     let start = col('.')
-    if(getline('.')[start-1] != '|')
+    if getline('.')[start-1] != '|'
         normal! F|
         let start = col('.')
     endif

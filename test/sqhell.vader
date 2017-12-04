@@ -41,6 +41,20 @@ Execute (to see if we echo a message when we specify an invalid host):
 
   AssertEqual '[SQHELL] host must be one of [live, another-connection, test]', last_message
 
+Given SQHTable (A buffer with a database name we can extract):
+  +--------------------+
+  | Tables_in_symfony  |
+  +--------------------+
+  | article            |
+  | gig                |
+  | migration_versions |
+  | review             |
+  +--------------------+
+
+Execute (to see if we're able to extract the database name):
+  let expected = 'symfony'
+  let actual = mysql#GetDatabaseName()
+  AssertEqual expected, actual
 
 Given SQHResult (A buffer that we will parse headings from):
   +----+-----------------+-------------------------------------+------------+----------------------------+--------------------------------------------+
