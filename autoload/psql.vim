@@ -5,7 +5,7 @@ function! psql#GetResultsFromQuery(command)
     let db = g:sqh_connections[g:sqh_connection]['database']
 
     let connection_details = 'PGPASSWORD='. password . ' psql -U' . user . ' -h ' . host . ' -d ' . db . ' --pset footer'
-    let system_command = connection_details . " -c " . shellescape(a:command)
+    let system_command = 'echo ' . shellescape(join(split(a:command, "\n"))) . ' | ' . connection_details
     let query_results = system(system_command)
     return query_results
 endfunction
