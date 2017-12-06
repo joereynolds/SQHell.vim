@@ -25,7 +25,7 @@ function! psql#SortResults(sort_options)
     let last_line = search('^\s*$', 'nW') - 1
 
     let cursor_pos = getpos('.')
-    let line_until_cursor = getline(first_line)[:cursor_pos[2]]
+    let line_until_cursor = getline(first_line)[:cursor_pos[2] - 1]
     let sort_column = len(substitute(line_until_cursor, '[^|]', '', 'g')) + 1
 
     let sort_command = first_line . ',' . last_line . '!sort -k ' . sort_column . ' -t \| ' . a:sort_options
