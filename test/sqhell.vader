@@ -134,4 +134,6 @@ Given SQHInsert (A buffer from which to generate the UPDATE statement):
 Execute (to see if the generated query is correct):
   let t:tabInfo = 'test.test'
   let b:prev = '"1","prevValue1","prevValue2"'
-  let expected = 'UPDATE ' . t:tabInfo . ' SET id="2", someColumn1="someValue1", someColumn2="someValue2" WHERE id="1" AND someColumn1="prevValue1" AND comeColumn2="prevValue2"'
+  let expected = 'UPDATE ' . t:tabInfo . ' SET id="2", someColumn1="someValue1", someColumn2="someValue2" WHERE id="1" AND someColumn1="prevValue1" AND someColumn2="prevValue2"'
+  let actual = mysql#CreateUpdateFromCSV()
+  AssertEqual expected, actual
