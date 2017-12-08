@@ -20,7 +20,7 @@ endfunction
 function! mysql#DescribeTable(table)
     let l:db = mysql#GetDatabaseName()
     let l:query = 'DESCRIBE ' . l:db . '.' . a:table
-    call sqhell#InsertResultsToNewBuffer('SQHUnspecified', mysql#GetResultsFromQuery(l:query), 1)
+    call sqhell#InsertResultsToNewBuffer('SQHUnspecified', mysql#GetResultsFromQuery(l:query))
 endfunction
 
 "This is ran when we press 'e' on an SQHTable buffer
@@ -31,14 +31,14 @@ function! mysql#ShowRecordsInTable(table)
 endfunction
 
 function! mysql#ShowDatabases()
-    call sqhell#InsertResultsToNewBuffer('SQHDatabase', mysql#GetResultsFromQuery('SHOW DATABASES'), 1)
+    call sqhell#InsertResultsToNewBuffer('SQHDatabase', mysql#GetResultsFromQuery('SHOW DATABASES'))
 endfunction
 
 "Shows all tables for a given database
 "Can also be ran by pressing 'e' in
 "an SQHDatabase buffer
 function! mysql#ShowTablesForDatabase(database)
-    call sqhell#InsertResultsToNewBuffer('SQHTable', mysql#GetResultsFromQuery('SHOW TABLES FROM ' . a:database), 1)
+    call sqhell#InsertResultsToNewBuffer('SQHTable', mysql#GetResultsFromQuery('SHOW TABLES FROM ' . a:database))
 endfunction
 
 "Drops database at cursor
@@ -107,7 +107,16 @@ endfunction
 "Use this function to customise
 "the removal of said crap...
 function! mysql#PostBufferFormat()
-    keepjumps normal! gg"_2dd
+    " keepjumps normal! gg"_2dd
+    if(&ft == 'testType')
+        return
+    endif
+    if(&ft == 'SQHInsert')
+        :1;/,/-1d
+    else
+        :1;/+---/-1d
+    endif
+    :nohl
 endfunction
 
 "Deletes table row(s) by pressing 'dd'
@@ -132,31 +141,32 @@ function! mysql#DeleteRow()
     endif
 endfunction
 
-"Called by pressing 'e' on an SQHResult buffer
+"Called by pressing 'e' in an SQHResult buffer
 function! mysql#EditRow()
     let row = getline('.')
     let csv = sqhell#CreateCSVFromRow(row)
-    let savecur = getcurpos()
     let head = mysql#FormatHeadingsAsCsv(mysql#GetTableHeadings())
-    call setpos('.', savecur)
-    let tmp = split(b:last_query, ' ')
-    let index = index(tmp, 'WHERE')
-    if(index != -1)
-        let tmp = tmp[0:index-1]
-    endif
-    let index = index(tmp, 'LIMIT')
-    if(index != -1)
-        let tmp = tmp[0:index-1]
-    endif
-    let tmp = tmp[len(tmp)-1]
-    let tmp = split(tmp, '\.')
+    let tmp = mysql#GetTableInfoFromQuery(b:last_query)
     let db = tmp[0]
     let table = tmp[1]
 
     :bd
-    call sqhell#InsertResultsToNewBuffer('SQHInsert', "\n" . head . "\n" . csv, 1)
+    call sqhell#InsertResultsToNewBuffer('SQHInsert', head . "\n" . csv)
     let b:type = 'edit'
     let b:prev = csv
+    let t:tabInfo = db . '.' . table
+endfunction
+
+"Called by pressing 'i' in an SQHResult buffer
+function! mysql#InsertRow()
+    let head = mysql#FormatHeadingsAsCsv(mysql#GetTableHeadings())
+    let tmp = mysql#GetTableInfoFromQuery(b:last_query)
+    let db = tmp[0]
+    let table = tmp[1]
+
+    :bd
+    call sqhell#InsertResultsToNewBuffer('SQHInsert', head)
+    let b:type = 'insert'
     let t:tabInfo = db . '.' . table
 endfunction
 
@@ -164,7 +174,7 @@ function! mysql#AddRow()
     if(b:type == 'edit')
         let query = mysql#CreateUpdateFromCSV()
     elseif(b:type == 'insert')
-        "TODO: create insert into query
+        let query = mysql#CreateInsertFromCSV()
     endif
     if(query == 'Error')
         return
@@ -173,6 +183,36 @@ function! mysql#AddRow()
     call mysql#GetResultsFromQuery(query)
     call sqhell#ExecuteCommand('SELECT * FROM ' . t:tabInfo)
     unlet t:tabInfo
+endfunction
+
+"Generate the insert query from the edited csv style buffer
+function! mysql#CreateInsertFromCSV()
+    let cols = split(getline(1), ',')
+    let vals = split(getline(2), '"')
+    let vals = filter(vals, 'v:val != ","')
+    let vals = map(vals, '"\"" . v:val . "\""')
+
+    if len(cols) != len(vals)
+        echom 'Incorrect number of values.'
+        echom 'Expected: ' . len(cols) . ', got: ' . len(vals) . '.'
+        return 'Error'
+    endif
+
+    let qcols = ' ('
+    let qvals = ' VALUES('
+    for i in range(0, len(cols)-1)
+        if i != 0
+            let qcols = qcols . ', '
+            let qvals = qvals . ', '
+        endif
+        let qcols = qcols . cols[i]
+        let qvals = qvals . vals[i]
+    endfor
+    let qcols = qcols . ')'
+    let qvals = qvals . ')'
+
+    let query = 'INSERT INTO ' . t:tabInfo . qcols . qvals
+    return query
 endfunction
 
 "Generate the update query from the edited csv style buffer
@@ -261,4 +301,20 @@ function! mysql#GetColumnValue()
     let val = sqhell#TrimString(val)
     call setpos('.', savecurpos)
     return val
+endfunction
+
+"Returns the database and table name from query
+function! mysql#GetTableInfoFromQuery(query)
+    let tmp = split(a:query, ' ')
+    let index = index(tmp, 'WHERE')
+    if(index != -1)
+        let tmp = tmp[0:index-1]
+    endif
+    let index = index(tmp, 'LIMIT')
+    if(index != -1)
+        let tmp = tmp[0:index-1]
+    endif
+    let tmp = tmp[len(tmp)-1]
+    let tmp = split(tmp, '\.')
+    return tmp
 endfunction

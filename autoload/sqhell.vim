@@ -18,7 +18,7 @@ endfunction
 
 "Inserts SQL results into a new temporary buffer"
 function! sqhell#ExecuteCommand(command)
-    execute "call sqhell#InsertResultsToNewBuffer('SQHResult', " . g:sqh_provider . "#GetResultsFromQuery(a:command), 1)"
+    execute "call sqhell#InsertResultsToNewBuffer('SQHResult', " . g:sqh_provider . "#GetResultsFromQuery(a:command))"
     let b:last_query = a:command
 endfunction
 
@@ -47,12 +47,8 @@ function! sqhell#ExecuteFile(...)
     call sqhell#ExecuteCommand(l:file_content)
 endfunction
 
-function! sqhell#InsertResultsToNewBuffer(local_filetype, query_results, format)
+function! sqhell#InsertResultsToNewBuffer(local_filetype, query_results)
     enew! | put =a:query_results
-
-    if (a:format)
-        execute "call " . g:sqh_provider . "#PostBufferFormat()"
-    endif
 
     "This prevents newline characters from literally rendering out
     "Keeping this as a comment just incase anyone decides to get
@@ -64,6 +60,8 @@ function! sqhell#InsertResultsToNewBuffer(local_filetype, query_results, format)
     setlocal noswapfile
     setlocal nowrap
     execute 'setlocal filetype=' . a:local_filetype
+
+    execute "call " . g:sqh_provider . "#PostBufferFormat()"
 endfunction
 
 "Proxies to the provider of choice
@@ -97,6 +95,14 @@ endfunction
 function! sqhell#GetTableHeader()
     execute 'let ret = ' . g:sqh_provider . '#GetTableHeader()'
     return ret
+endfunction
+
+function! sqhell#EditRow()
+    execute 'call ' .g:sqh_provider . '#EditRow()'
+endfunction
+
+function! sqhell#InsertRow()
+    execute 'call ' . g:sqh_provider . '#InsertRow()'
 endfunction
 
 function! sqhell#GetTableName()
