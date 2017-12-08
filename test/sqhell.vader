@@ -128,7 +128,7 @@ Execute (to see if the generated query is correct):
   AssertEqual expected, actual
 
 Given SQHInsert (A buffer from which to generate the UPDATE statement):
-  id,someColumn1,someColulmn2
+  id,someColumn1,someColumn2
   "2","someValue1","someValue2"
 
 Execute (to see if the generated query is correct):
