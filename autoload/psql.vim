@@ -24,7 +24,7 @@ function! psql#SortResults(sort_options)
 endfunction
 
 function! psql#PostBufferFormat()
-    normal! ggdd
-    normal! Gdkgg
+    keepjumps normal! ggdd
+    keepjumps normal! Gdkgg
 endfunction
 

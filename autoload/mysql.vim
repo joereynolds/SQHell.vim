@@ -106,7 +106,7 @@ endfunction
 "Use this function to customise
 "the removal of said crap...
 function! mysql#PostBufferFormat()
-    normal! gg"_2dd
+    keepjumps normal! gg"_2dd
 endfunction
 
 "Deletes table row(s) by pressing 'dd'
