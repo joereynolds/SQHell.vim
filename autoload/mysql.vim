@@ -112,9 +112,9 @@ function! mysql#PostBufferFormat()
         return
     endif
     if(&ft == 'SQHInsert')
-        :1;/,/-1d
+        :silent! 1;/,/-1d
     else
-        :1;/+---/-1d
+        :silent! 1;/+---/-1d
     endif
     :nohl
 endfunction
