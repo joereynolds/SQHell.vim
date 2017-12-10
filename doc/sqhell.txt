@@ -59,6 +59,13 @@ SQHShowDatabases                                          *sqhell-show-databases
 
     Shows all databases
 
+SQHCreateDatabase                                        *sqhell-create-database*
+
+    Arguments: database name
+    Example: SQHCreateDatabase Users
+
+    Creates a new database
+
 SQHShowTablesForDatabase                        *sqhell-show-tables-for-database*
 
     Arguments: table name
@@ -158,6 +165,10 @@ SQHDatabase                                                  *sqhell-sqhdatabase
         Note this opens a buffer with a filetype of SQHTable
 
     `dd` - Drop the database.
+
+        Note this reloads the current SQHDatabase buffer
+
+    `c` - Create a new database.
 
         Note this reloads the current SQHDatabase buffer
 

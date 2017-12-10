@@ -67,6 +67,10 @@ function! sqhell#InsertResultsToNewBuffer(local_filetype, query_results, format)
 endfunction
 
 "Proxies to the provider of choice
+function! sqhell#CreateDatabase(name, show)
+    execute 'call ' . g:sqh_provider . '#CreateDatabase("' . a:name . '", ' . a:show . ')'
+endfunction
+
 function! sqhell#ShowTablesForDatabase(database)
     execute 'call ' . g:sqh_provider . '#ShowTablesForDatabase("' . a:database.'")'
 endfunction

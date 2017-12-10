@@ -81,6 +81,8 @@ Inside an SQHDatabase you can press the following
 
 `e` - To see all the tables in that database. This will open an SQHTable buffer.
 
+`c` - Create a new database (will be asked for name by input).
+
 
 ### SQHTable
 

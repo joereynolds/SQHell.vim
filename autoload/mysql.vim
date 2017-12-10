@@ -34,6 +34,23 @@ function! mysql#ShowDatabases()
     call sqhell#InsertResultsToNewBuffer('SQHDatabase', mysql#GetResultsFromQuery('SHOW DATABASES'), 1)
 endfunction
 
+function! mysql#CreateDatabase(name, show)
+    if(a:name == "")
+        call inputsave()
+        let l:name = input("Enter database name: ")
+        call inputrestore()
+    else
+        let l:name = a:name
+    endif
+
+    let l:create_query = 'CREATE DATABASE ' . l:name
+    call mysql#GetResultsFromQuery(l:create_query)
+    if(a:show)
+        :bd
+        call mysql#ShowDatabases()
+    endif
+endfunction
+
 "Shows all tables for a given database
 "Can also be ran by pressing 'e' in
 "an SQHDatabase buffer
