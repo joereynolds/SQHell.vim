@@ -112,9 +112,9 @@ function! mysql#PostBufferFormat()
         return
     endif
     if(&ft == 'SQHInsert')
-        :silent! 1;/,/-1d
+        :silent! keepjumps 1;/,/-1d
     else
-        :silent! 1;/+---/-1d
+        :silent! keepjumps 1;/+---/-1d
     endif
     :nohl
 endfunction
@@ -189,7 +189,7 @@ endfunction
 function! mysql#CreateInsertFromCSV()
     let cols = split(getline(1), ',')
     let vals = split(getline(2), '"')
-    let vals = filter(vals, 'v:val != ","')
+    let vals = filter(vals, 'v:val !~ "^,"')
     let vals = map(vals, '"\"" . v:val . "\""')
 
     if len(cols) != len(vals)
@@ -223,10 +223,10 @@ function! mysql#CreateUpdateFromCSV()
     let cols = split(getline(1), ',')
     let vals = getline(2)
     let vals = split(vals, '"')
-    let vals = filter(vals, 'v:val != ","')
+    let vals = filter(vals, 'v:val !~ "^,"')
     let vals = map(vals, '"\"" . v:val . "\""')
     let b:prev = split(b:prev, '"')
-    let b:prev = filter(b:prev, 'v:val != ","')
+    let b:prev = filter(b:prev, 'v:val !~ "^,"')
     let b:prev = map(b:prev, '"\"" . v:val . "\""')
 
     if len(cols) != len(vals)
