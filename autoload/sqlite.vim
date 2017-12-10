@@ -1,6 +1,7 @@
 function! sqlite#GetResultsFromQuery(command)
-    let l:connection_details = 'sqlite3 -cmd '
-    let l:system_command = l:connection_details . shellescape(a:command)
+    let l:database = g:sqh_connections[g:sqh_connection]['database']
+    let l:connection_details = 'sqlite3 ' . l:database
+    let l:system_command = l:connection_details . ' ' . shellescape(a:command)
     let l:query_results = system(l:system_command)
     return l:query_results
 endfunction
@@ -14,5 +15,5 @@ endfunction
 "Use this function to customise
 "the removal of said crap...
 function! sqlite#PostBufferFormat()
-    keepjumps normal! gg_dd
+    keepjumps normal! gg"_dd
 endfunction
