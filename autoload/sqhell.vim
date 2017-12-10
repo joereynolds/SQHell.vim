@@ -117,3 +117,8 @@ endfunction
 function! sqhell#GeneratePrompt(query)
     return '[SQHELL] Execute "' . a:query . '"?'
 endfunction
+
+"statusline variable(s)
+function! sqhell#Host()
+    return g:sqh_connection
+endfunction

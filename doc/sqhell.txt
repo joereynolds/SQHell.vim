@@ -1,4 +1,4 @@
-*sqhell.txt*    For Vim version ?.?     Last Change 2017 November 24
+*sqhell.txt*    For Vim version ?.?     Last Change 2017 December 9
 *sqhell*
 
 SQHell - An SQL wrapper for vim
@@ -92,7 +92,6 @@ SQHExecuteFile                                              *sqhell-execute-file
     If a filename is given it executes that file, otherwise defaults to the
     buffer you are in ('%')
 
-
 SQHExecute                                                       *sqhell-execute*
 
     Arguments: none
@@ -184,6 +183,18 @@ SQHResult                                                      *sqhell-sqhresult
 SQHInsert                                                      *sqhell-sqhinsert*
 
     `ZZ` - Close and save row to database.
+
+===============================================================================
+4. Statusline                                                 *sqhell-statusline*
+
+SQHell exposes 1 variable for you to see the current host you're connecting
+to.
+
+    `sqhell#Host()` - Returns the current host you're connected to.
+
+An example statusline configuration
+
+    `set statusline=%{fugitive#statusline()}%y%m%=%f[%02p%%][%{sqhell#Host()}]`
 
 
 vim:tw=78:ts=8:ft=help:norl:
