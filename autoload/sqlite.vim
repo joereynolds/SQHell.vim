@@ -23,7 +23,6 @@ function! sqlite#ShowRecordsInTable(table)
     call sqhell#ExecuteCommand(l:query)
 endfunction
 
-
 "Each provider may paste some extra
 "crap that is irrelevant to us
 "Use this function to customise
