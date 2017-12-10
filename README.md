@@ -3,9 +3,10 @@
 An SQL wrapper for Vim.
 Execute commands, sort results, navigate tables and databases and so much more!
 
-The supported providers at the moment are 
+The supported providers at the moment are
 - MySQL
-- Postgres 
+- Postgres
+- Sqlite
 
 ## Examples
 
