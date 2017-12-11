@@ -90,15 +90,16 @@ function! mysql#DropTableFromDatabase(database, table, show)
 endfunction
 
 function! mysql#SortResults(sort_options)
-    let cursor_pos = getpos('.')
-    let line_until_cursor = getline('.')[:cursor_pos[2] - 1]
-    let sort_column = len(substitute(line_until_cursor, '[^|]', '', 'g'))
-    if sort_column == 0
-      let sort_column = 1
+    let l:cursor_pos = getpos('.')
+    let l:line_until_cursor = getline('.')[:l:cursor_pos[2] - 1]
+    let l:sort_column = len(substitute(l:line_until_cursor, '[^|]', '', 'g'))
+    if l:sort_column == 0
+      let l:sort_column = 1
     endif
-    let sort_column += 1
-    exec '4,$-1!sort -k ' . sort_column . ' -t \| ' . a:sort_options
-    call setpos('.', cursor_pos)
+    let l:sort_column += 1
+
+    exec '4,$-1!sort -n -k ' . l:sort_column . ' -t \| ' . a:sort_options
+    call setpos('.', l:cursor_pos)
 endfunction
 
 "Each provider may paste some extra
