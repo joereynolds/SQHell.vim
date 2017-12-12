@@ -102,7 +102,9 @@ Inside an SQHResult you can press the following
 
 `dd` to delete the row WHERE the column is the value under the cursor (don't worry... there's a prompt).
 
-`e` to edit the current row. This will open an SQHInsert buffer
+`e` to edit the current row. This will open an SQHInsert buffer.
+
+`i` to insert a new row. This will open an SQHInsert buffer.
 
 
 ### SQHInsert

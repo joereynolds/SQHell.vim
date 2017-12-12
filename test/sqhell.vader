@@ -8,11 +8,11 @@ Execute (to see if all commands are available):
   AssertEqual exists(':SQHDropTableFromDatabase'), 2
 
 Execute (to see whether we set the correct filetype on a buffer):
-  call sqhell#InsertResultsToNewBuffer('testType', '', 1)
+  call sqhell#InsertResultsToNewBuffer('testType', '')
   AssertEqual 'testType', &filetype
 
 Execute (to see whether we set the correct buffer local settings):
-  call sqhell#InsertResultsToNewBuffer('testType', '', 1)
+  call sqhell#InsertResultsToNewBuffer('testType', '')
   AssertEqual 'hide', &bufhidden
   AssertEqual 'nofile', &buftype
 
@@ -109,3 +109,24 @@ Expect SQHResult (the buffer to be in Reverse order by primary key):
   |  2 | Supporting      | Tivoli, Buckley, UK                 | 2017-10-20 | The Sex Pistols Experience | http://www.sexpistolsexperience.co.uk/     |
   |  1 | Supporting      | Mcleans Pub, Deeside, UK            | 2017-09-09 | Vice Squad                 | http://vicesquad.co.uk/punkrock/           |
   +----+-----------------+-------------------------------------+------------+----------------------------+--------------------------------------------+
+
+Given SQHInsert (A buffer from which to generate the INSERT statement):
+  id,someColumn1,someColumn2
+  "1","someValue1","someValue2"
+
+Execute (to see if the generated query is correct):
+  let t:tabInfo = 'test.test'
+  let expected = 'INSERT INTO ' . t:tabInfo . ' (id, someColumn1, someColumn2) VALUES("1", "someValue1", "someValue2")'
+  let actual = mysql#CreateInsertFromCSV()
+  AssertEqual expected, actual
+
+Given SQHInsert (A buffer from which to generate the UPDATE statement):
+  id,someColumn1,someColumn2
+  "2","someValue1","someValue2"
+
+Execute (to see if the generated query is correct):
+  let t:tabInfo = 'test.test'
+  let b:prev = '"1","prevValue1","prevValue2"'
+  let expected = 'UPDATE ' . t:tabInfo . ' SET id="2", someColumn1="someValue1", someColumn2="someValue2" WHERE id="1" AND someColumn1="prevValue1" AND someColumn2="prevValue2"'
+  let actual = mysql#CreateUpdateFromCSV()
+  AssertEqual expected, actual

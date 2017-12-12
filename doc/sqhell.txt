@@ -216,7 +216,11 @@ SQHResult                                                      *sqhell-sqhresult
         Equivalent to `:SQHSortResults -fr`
 
     `e` - Edit current table row. Closes current buffer (SQHResult)
-        and opens a new SQHInsert buffer in current window.
+          and opens a new SQHInsert buffer in current window.
+
+    `i` - Insert a new row into the table. Closes current buffer
+          and opens a new SQHInsert buffer in current window.
+
 
 SQHInsert                                                      *sqhell-sqhinsert*
 
