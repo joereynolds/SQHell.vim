@@ -106,13 +106,12 @@ function! sqhell#InsertRow()
 endfunction
 
 function! sqhell#GetTableName()
-    let savewin = winnr()
+    let l:savewin = winnr()
     wincmd p
-    let table = expand('<cword>')
-    let tmp_db = mysql#GetDatabaseName()
-    let db = sqhell#TrimString(tmp_db)
-    execute savewin . "wincmd w"
-    return [table, db]
+    let l:table = expand('<cword>')
+    let l:db = sqhell#TrimString(w:database)
+    execute l:savewin . "wincmd w"
+    return [l:table, l:db]
 endfunction
 
 function! sqhell#TrimString(str)
