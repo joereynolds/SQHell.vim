@@ -49,6 +49,16 @@ the `autoload` directory.
 
 i.e. `let g:sqh_provider = 'psql'`
 
+g:sqh_results_output                                      *sqhell-results-output*
+
+Whether results should open in a new split each time or occupy the same
+window.
+
+The default is 'nosplit', set it to any other value to have it split into
+a new buffer    
+
+i.e. `let g:sqh_results_output = 'split'`
+
 
 ===============================================================================
 2. Connections and their settings                            *sqhell-connections*

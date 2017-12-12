@@ -13,7 +13,6 @@ function! sqhell#SwitchConnection(connection)
     endif
 
     let g:sqh_connection = a:connection
-
 endfunction
 
 "Inserts SQL results into a new temporary buffer"
@@ -48,7 +47,12 @@ function! sqhell#ExecuteFile(...)
 endfunction
 
 function! sqhell#InsertResultsToNewBuffer(local_filetype, query_results, format)
-    enew! | put =a:query_results
+
+    if g:sqh_results_output ==? 'nosplit'
+        enew! | put =a:query_results
+    else
+        new | put =a:query_results
+    endif
 
     if (a:format)
         execute "call " . g:sqh_provider . "#PostBufferFormat()"
@@ -103,7 +107,7 @@ function! sqhell#GetTableName()
     let l:savewin = winnr()
     wincmd p
     let l:table = expand('<cword>')
-    let l:db = sqhell#TrimString(w:database)
+    let l:db = sqhell#TrimString(g:sqh_database)
     execute l:savewin . "wincmd w"
     return [l:table, l:db]
 endfunction

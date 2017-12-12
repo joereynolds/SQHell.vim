@@ -29,8 +29,8 @@ endfunction
 "Can also be ran by pressing 'e' in
 "an SQHDatabase buffer
 function! mysql#ShowTablesForDatabase(database)
-    "The entry point and ONLY place w:database should be set"
-    let w:database = a:database
+    "The entry point and ONLY place g:sqh_database should be set"
+    let g:sqh_database = a:database
     call sqhell#InsertResultsToNewBuffer('SQHTable', mysql#GetResultsFromQuery('SHOW TABLES FROM ' . mysql#GetDatabase()), 1)
 endfunction
 
@@ -55,7 +55,7 @@ endfunction
 
 "Returns the last selected database"
 function! mysql#GetDatabase()
-    return w:database
+    return g:sqh_database
 endfunction
 
 "Drops table by pressing 'dd'

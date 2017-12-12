@@ -6,6 +6,7 @@ let g:loaded_sqhell = 1
 let g:sqh_provider = get(g:, 'sqh_provider', 'mysql')
 let g:sqh_connection = get(g:, 'sqh_connection', 'default')
 let g:sqh_results_limit = get(g:, 'sqh_results_limit', 100)
+let g:sqh_results_output = get(g:, 'sqh_results_output', 'nosplit')
 
 command! -nargs=0 SQHShowDatabases execute "call " . g:sqh_provider . "#ShowDatabases()"
 command! -nargs=1 SQHShowTablesForDatabase execute "call " . g:sqh_provider . "#ShowTablesForDatabase('" . <q-args> . "')"

@@ -44,7 +44,7 @@ Execute (to see if we echo a message when we specify an invalid host):
 Execute (to see if we're able to extract the database name):
   "In the future, change this to a call to SQHShowTablesForDatabase
   "So that we're testing the actual code
-  let w:database = 'symfony'
+  let g:sqh_database = 'symfony'
   let expected = 'symfony'
   let actual = mysql#GetDatabase()
   AssertEqual expected, actual
