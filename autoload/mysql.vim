@@ -88,7 +88,7 @@ endfunction
 
 function! mysql#SortResults(sort_options)
     let l:cursor_pos = getpos('.')
-    let l:line_until_cursor = getline('.')[:l:cursor_pos[2]]
+    let l:line_until_cursor = getline('.')[:l:cursor_pos[2] - 1]
     let l:sort_column = len(substitute(l:line_until_cursor, '[^|]', '', 'g'))
     if l:sort_column == 0
       let l:sort_column = 1

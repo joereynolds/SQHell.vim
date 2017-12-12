@@ -1,0 +1,59 @@
+Before (Set g:sqh_provider to 'psql'):
+  let g:sqh_provider = 'psql'
+
+Given SQHResult (A buffer with multiple tables returned):
+   id | first_name | last_name  | birth_date 
+  ----+------------+------------+------------
+    1 | Robert     | Marley     | 1966-08-01
+    2 | John       | Hancock    | 2015-08-03
+    3 | Peter      | Parker     | 1990-08-01
+    4 | Jeremy     | Clarkson   | 1977-08-01
+    5 | Wade       | Watts      | 1977-08-01
+    6 | Jean-Luc   | Picard     | 1950-11-24
+    7 | Anakin     | Skywalker  | 1970-06-01
+    8 | Tommy      | Wiseau     | 2015-07-06
+    9 | Bruce      | Lee        | 2001-01-01
+   10 | Grom       | Hellscream | 2002-02-02
+
+   id |           email_address           |       user_created_date       
+  ----+-----------------------------------+-------------------------------
+    1 | bob.marley@onelove.com            | 2015-08-13 15:41:01.286399-04
+    2 | JohnHancock@usa-1776.com          | 2015-11-12 14:55:08.658266-05
+    3 | PeterParker@PickledPepper.com     | 2015-11-13 10:37:07.800893-05
+    4 | jeremy@topgear.co.uk              | 2015-11-20 10:09:28.822073-05
+    5 | parzival@gss-oasis.us             | 2015-11-20 14:43:14.944273-05
+    6 | Jean-Luc@ncc-1701-d.org           | 2015-12-03 12:34:59.158075-05
+    7 | anakin@skywalking.info            | 2016-01-27 10:16:17.822779-05
+    8 | lisa.is.tearing.me.apart@room.com | 2015-12-31 13:11:30.638645-05
+    9 | learn-jeet-kune-do@leejunfan.com  | 2016-01-06 11:54:12.403473-05
+   10 | WildhammerFactChecker@blizz.us    | 2016-01-07 14:48:32.347995-05
+
+Do (Sort the first table by its second column):
+  2ws
+
+Expect SQHResult (only the first table to be sorted by its second column):
+   id | first_name | last_name  | birth_date 
+  ----+------------+------------+------------
+    7 | Anakin     | Skywalker  | 1970-06-01
+    9 | Bruce      | Lee        | 2001-01-01
+   10 | Grom       | Hellscream | 2002-02-02
+    6 | Jean-Luc   | Picard     | 1950-11-24
+    4 | Jeremy     | Clarkson   | 1977-08-01
+    2 | John       | Hancock    | 2015-08-03
+    3 | Peter      | Parker     | 1990-08-01
+    1 | Robert     | Marley     | 1966-08-01
+    8 | Tommy      | Wiseau     | 2015-07-06
+    5 | Wade       | Watts      | 1977-08-01
+
+   id |           email_address           |       user_created_date       
+  ----+-----------------------------------+-------------------------------
+    1 | bob.marley@onelove.com            | 2015-08-13 15:41:01.286399-04
+    2 | JohnHancock@usa-1776.com          | 2015-11-12 14:55:08.658266-05
+    3 | PeterParker@PickledPepper.com     | 2015-11-13 10:37:07.800893-05
+    4 | jeremy@topgear.co.uk              | 2015-11-20 10:09:28.822073-05
+    5 | parzival@gss-oasis.us             | 2015-11-20 14:43:14.944273-05
+    6 | Jean-Luc@ncc-1701-d.org           | 2015-12-03 12:34:59.158075-05
+    7 | anakin@skywalking.info            | 2016-01-27 10:16:17.822779-05
+    8 | lisa.is.tearing.me.apart@room.com | 2015-12-31 13:11:30.638645-05
+    9 | learn-jeet-kune-do@leejunfan.com  | 2016-01-06 11:54:12.403473-05
+   10 | WildhammerFactChecker@blizz.us    | 2016-01-07 14:48:32.347995-05

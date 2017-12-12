@@ -1,0 +1,71 @@
+Before (Set g:sqh_provider to 'mysql'):
+  let g:sqh_provider = 'mysql'
+
+Given SQHResult (A buffer in order of primary key):
+  +----+-----------------+-------------------------------------+------------+----------------------------+--------------------------------------------+
+  | id | prefix          | location                            | date       | artist                     | url                                        |
+  +----+-----------------+-------------------------------------+------------+----------------------------+--------------------------------------------+
+  |  1 | Supporting      | Mcleans Pub, Deeside, UK            | 2017-09-09 | Vice Squad                 | http://vicesquad.co.uk/punkrock/           |
+  |  2 | Supporting      | Tivoli, Buckley, UK                 | 2017-10-20 | The Sex Pistols Experience | http://www.sexpistolsexperience.co.uk/     |
+  |  3 | Supporting      | The Live Rooms, Chester, UK         | 2017-11-23 | Wonk Unit                  | http://wonkunit.com/                       |
+  |  4 | Various Artists | The Station, Ashton Under Lyne, UK  | 2018-04-14 |                            |                                            |
+  |  6 | Various Artists | Helsinki, Finland                   | 2017-04-18 |                            |                                            |
+  |  7 | Various Artists | Hyvinkää, Finland                   | 2017-04-21 |                            |                                            |
+  |  8 | Various Artists | The North, Rhyl, UK                 | 2017-10-05 |                            |                                            |
+  |  9 | Various Artists | The Vic Biker's Pub, Coalville, UK  | 2017-10-27 |                            |                                            |
+  | 10 | Supporting      | o2 Academy, Manchester, UK          | 2017-10-21 | The Sex Pistols Experience | http://www.sexpistolsexperience.co.uk/     |
+  | 11 | Various Artists | Comrades Club, Church St, Conwy     | 2017-04-30 |                            |                                            |
+  | 12 | Various Artists | Rewind, Wrexham, UK                 | 2016-11-15 |                            |                                            |
+  | 13 | Various Artists | The Station, Ashton Under Lyne, UK  | 2017-07-01 |                            |                                            |
+  | 14 | Various Artists | The Lock Keeper, Chester, UK        | 2017-08-05 |                            |                                            |
+  | 16 | Event           | Rewind, Wrexham, UK                 | 2018-05-10 | Focus Wales                | http://www.focuswales.com/                 |
+  | 17 | Event           | Sumac Centre, Nottingham, UK        | 2018-08-25 | Punks 4 Homeless           | https://www.facebook.com/punk4thehomeless/ |
+  | 18 | Various Artists | Swan With 2 Necks, Macclesfield, UK | 2018-06-09 |                            |                                            |
+  +----+-----------------+-------------------------------------+------------+----------------------------+--------------------------------------------+
+
+Do (Sort the results in reverse order):
+  4jS
+
+Expect SQHResult (the buffer to be in Reverse order by primary key):
+  +----+-----------------+-------------------------------------+------------+----------------------------+--------------------------------------------+
+  | id | prefix          | location                            | date       | artist                     | url                                        |
+  +----+-----------------+-------------------------------------+------------+----------------------------+--------------------------------------------+
+  | 18 | Various Artists | Swan With 2 Necks, Macclesfield, UK | 2018-06-09 |                            |                                            |
+  | 17 | Event           | Sumac Centre, Nottingham, UK        | 2018-08-25 | Punks 4 Homeless           | https://www.facebook.com/punk4thehomeless/ |
+  | 16 | Event           | Rewind, Wrexham, UK                 | 2018-05-10 | Focus Wales                | http://www.focuswales.com/                 |
+  | 14 | Various Artists | The Lock Keeper, Chester, UK        | 2017-08-05 |                            |                                            |
+  | 13 | Various Artists | The Station, Ashton Under Lyne, UK  | 2017-07-01 |                            |                                            |
+  | 12 | Various Artists | Rewind, Wrexham, UK                 | 2016-11-15 |                            |                                            |
+  | 11 | Various Artists | Comrades Club, Church St, Conwy     | 2017-04-30 |                            |                                            |
+  | 10 | Supporting      | o2 Academy, Manchester, UK          | 2017-10-21 | The Sex Pistols Experience | http://www.sexpistolsexperience.co.uk/     |
+  |  9 | Various Artists | The Vic Biker's Pub, Coalville, UK  | 2017-10-27 |                            |                                            |
+  |  8 | Various Artists | The North, Rhyl, UK                 | 2017-10-05 |                            |                                            |
+  |  7 | Various Artists | Hyvinkää, Finland                   | 2017-04-21 |                            |                                            |
+  |  6 | Various Artists | Helsinki, Finland                   | 2017-04-18 |                            |                                            |
+  |  4 | Various Artists | The Station, Ashton Under Lyne, UK  | 2018-04-14 |                            |                                            |
+  |  3 | Supporting      | The Live Rooms, Chester, UK         | 2017-11-23 | Wonk Unit                  | http://wonkunit.com/                       |
+  |  2 | Supporting      | Tivoli, Buckley, UK                 | 2017-10-20 | The Sex Pistols Experience | http://www.sexpistolsexperience.co.uk/     |
+  |  1 | Supporting      | Mcleans Pub, Deeside, UK            | 2017-09-09 | Vice Squad                 | http://vicesquad.co.uk/punkrock/           |
+  +----+-----------------+-------------------------------------+------------+----------------------------+--------------------------------------------+
+
+Given SQHResult (A buffer in order of primary key):
+  +----+-----------------+-------------------------------------+------------+----------------------------+--------------------------------------------+
+  | id | prefix          | location                            | date       | artist                     | url                                        |
+  +----+-----------------+-------------------------------------+------------+----------------------------+--------------------------------------------+
+  |  1 | Supporting      | Mcleans Pub, Deeside, UK            | 2017-09-09 | Vice Squad                 | http://vicesquad.co.uk/punkrock/           |
+  |  2 | Supporting      | Tivoli, Buckley, UK                 | 2017-10-20 | The Sex Pistols Experience | http://www.sexpistolsexperience.co.uk/     |
+  |  3 | Supporting      | The Live Rooms, Chester, UK         | 2017-11-23 | Wonk Unit                  | http://wonkunit.com/                       |
+  |  4 | Various Artists | The Station, Ashton Under Lyne, UK  | 2018-04-14 |                            |                                            |
+  |  6 | Various Artists | Helsinki, Finland                   | 2017-04-18 |                            |                                            |
+  |  7 | Various Artists | Hyvinkää, Finland                   | 2017-04-21 |                            |                                            |
+  |  8 | Various Artists | The North, Rhyl, UK                 | 2017-10-05 |                            |                                            |
+  |  9 | Various Artists | The Vic Biker's Pub, Coalville, UK  | 2017-10-27 |                            |                                            |
+  | 10 | Supporting      | o2 Academy, Manchester, UK          | 2017-10-21 | The Sex Pistols Experience | http://www.sexpistolsexperience.co.uk/     |
+  | 11 | Various Artists | Comrades Club, Church St, Conwy     | 2017-04-30 |                            |                                            |
+  | 12 | Various Artists | Rewind, Wrexham, UK                 | 2016-11-15 |                            |                                            |
+  | 13 | Various Artists | The Station, Ashton Under Lyne, UK  | 2017-07-01 |                            |                                            |
+  | 14 | Various Artists | The Lock Keeper, Chester, UK        | 2017-08-05 |                            |                                            |
+  | 16 | Event           | Rewind, Wrexham, UK                 | 2018-05-10 | Focus Wales                | http://www.focuswales.com/                 |
+  | 17 | Event           | Sumac Centre, Nottingham, UK        | 2018-08-25 | Punks 4 Homeless           | https://www.facebook.com/punk4thehomeless/ |
+  | 18 | Various Artists | Swan With 2 Necks, Macclesfield, UK | 2018-06-09 |                            |                                            |
+  +----+-----------------+-------------------------------------+------------+----------------------------+--------------------------------------------+
