@@ -9,24 +9,15 @@ function! mysql#GetResultsFromQuery(command)
     return l:query_results
 endfunction
 
-"Tables_in_users_table => users_table"
-function! mysql#GetDatabaseName()
-    let l:raw_database = split(getline(2), 'Tables_in_')[1]
-    let l:current_database = sqhell#TrimString(substitute(l:raw_database, '|', '', ''))
-    return l:current_database
-endfunction
-
 "This is ran when press 'K' on an SQHTable buffer"
 function! mysql#DescribeTable(table)
-    let l:db = mysql#GetDatabaseName()
-    let l:query = 'DESCRIBE ' . l:db . '.' . a:table
+    let l:query = 'DESCRIBE ' . mysql#GetDatabase() . '.' . a:table
     call sqhell#InsertResultsToNewBuffer('SQHUnspecified', mysql#GetResultsFromQuery(l:query), 1)
 endfunction
 
 "This is ran when we press 'e' on an SQHTable buffer
 function! mysql#ShowRecordsInTable(table)
-    let l:db = sqhell#TrimString(mysql#GetDatabaseName())
-    let l:query = 'SELECT * FROM ' . l:db . '.' . a:table . ' LIMIT ' . g:sqh_results_limit
+    let l:query = 'SELECT * FROM ' . mysql#GetDatabase() . '.' . a:table . ' LIMIT ' . g:sqh_results_limit
     call sqhell#ExecuteCommand(l:query)
 endfunction
 
@@ -38,7 +29,9 @@ endfunction
 "Can also be ran by pressing 'e' in
 "an SQHDatabase buffer
 function! mysql#ShowTablesForDatabase(database)
-    call sqhell#InsertResultsToNewBuffer('SQHTable', mysql#GetResultsFromQuery('SHOW TABLES FROM ' . a:database), 1)
+    "The entry point and ONLY place w:database should be set"
+    let w:database = a:database
+    call sqhell#InsertResultsToNewBuffer('SQHTable', mysql#GetResultsFromQuery('SHOW TABLES FROM ' . mysql#GetDatabase()), 1)
 endfunction
 
 "Drops database at cursor
@@ -60,14 +53,18 @@ function! mysql#DropDatabase(database, show)
     endif
 endfunction
 
+"Returns the last selected database"
+function! mysql#GetDatabase()
+    return w:database
+endfunction
+
 "Drops table by pressing 'dd'
 "in a SQHTable buffer
 "Arguments:
 " - table: string, the table name
 " - show: boolean, show databases?
 function! mysql#DropTableSQHTableBuf(table, show)
-    let l:db = mysql#GetDatabaseName()
-    call mysql#DropTableFromDatabase(l:db, a:table, a:show)
+    call mysql#DropTableFromDatabase(mysql#GetDatabase(), a:table, a:show)
 endfunction
 
 "Drops table
@@ -78,9 +75,9 @@ endfunction
 function! mysql#DropTableFromDatabase(database, table, show)
     let l:drop_query = 'DROP TABLE ' . sqhell#TrimString(a:database) . "." . a:table
 
-    let prompt = confirm(sqhell#GeneratePrompt(l:drop_query), "&Yes\n&No", 2)
+    let l:prompt = confirm(sqhell#GeneratePrompt(l:drop_query), "&Yes\n&No", 2)
 
-    if (prompt == 1)
+    if (l:prompt == 1)
         call mysql#GetResultsFromQuery(l:drop_query)
         if(a:show)
             :bd
