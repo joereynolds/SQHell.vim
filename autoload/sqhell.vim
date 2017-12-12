@@ -48,7 +48,7 @@ function! sqhell#ExecuteFile(...)
 endfunction
 
 function! sqhell#InsertResultsToNewBuffer(local_filetype, query_results, format)
-    new | put =a:query_results
+    enew! | put =a:query_results
 
     if (a:format)
         execute "call " . g:sqh_provider . "#PostBufferFormat()"
@@ -116,4 +116,9 @@ endfunction
 "Returns a friendly string for confirm dialogs
 function! sqhell#GeneratePrompt(query)
     return '[SQHELL] Execute "' . a:query . '"?'
+endfunction
+
+"statusline variable(s)
+function! sqhell#Host()
+    return g:sqh_connection
 endfunction

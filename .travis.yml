@@ -1,5 +1,9 @@
 language: vim
 
+os:
+    - linux
+    - osx
+
 before_script: |
   git clone https://github.com/junegunn/vader.vim.git
   git clone https://github.com/joereynolds/SQHell.vim

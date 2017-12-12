@@ -1,4 +1,4 @@
-*sqhell.txt*    For Vim version ?.?     Last Change 2017 November 24
+*sqhell.txt*    For Vim version ?.?     Last Change 2017 December 10
 *sqhell*
 
 SQHell - An SQL wrapper for vim
@@ -10,7 +10,7 @@ Note It is strongly recommended that you keep your configuration in a separate
 file outside of version control.
 
 Once the plugin is installed, you will need to add a dictionary that can be
-loaded called `g:sqh_connections`.
+loaded called `g:sqh_connections`. See more at the |sqhell-connections| section.
 
 An example is given below containing multiple hosts
 
@@ -49,8 +49,51 @@ the `autoload` directory.
 
 i.e. `let g:sqh_provider = 'psql'`
 
+
 ===============================================================================
-2. Commands                                                     *sqhell-commands*
+2. Connections and their settings                            *sqhell-connections*
+
+Connections details can vary depending on the database system you use.
+Because of this, here are some examples to get you started
+
+MYSQL                                                  *sqhell-connections-mysql*
+
+MySQL requires a user, password, and host.
+
+let g:sqh_connections = {
+    \ 'default': {
+    \   'user': 'root',
+    \   'password': 'superman',
+    \   'host': '46.105.58.32'
+    \},
+\}
+
+POSTGRES                                            *sqhell-connections-postgres*
+
+Postgres requires a user, password, host, and database.
+
+let g:sqh_connections = {
+    \ 'default': {
+    \   'user': 'root',
+    \   'password': 'hunter2',
+    \   'host': '45.104.23.67',
+    \   'database': 'postgres'
+    \},
+\}
+
+SQLITE                                                *sqhell-connections-sqlite*
+
+Sqlite requires a local database file (simples!).
+Note that the database must have the absolute path to its location.
+
+let g:sqh_connections = {
+    \ 'default': {
+    \   'database': '/home/joe/chinook.db'
+    \}
+\}
+
+===============================================================================
+3. Commands                                                     *sqhell-commands*
 
 SQHShowDatabases                                          *sqhell-show-databases*
 
@@ -66,7 +109,7 @@ SQHShowTablesForDatabase                        *sqhell-show-tables-for-database
 
     Shows all tables for a given database.
     Note This creates a buffer with a filetype of SQHTable.
-    See 'sqhell-filetypes'
+    See |sqhell-filetypes|
 
 SQHDropDatabase                                            *sqhell-drop-database*
 
@@ -91,7 +134,6 @@ SQHExecuteFile                                              *sqhell-execute-file
     Executes a given file as SQL.
     If a filename is given it executes that file, otherwise defaults to the
     buffer you are in ('%')
-
 
 SQHExecute                                                       *sqhell-execute*
 
@@ -126,7 +168,7 @@ SQHSortResults                                                *sqh-sort-results*
 
 
 ===============================================================================
-3. Filetypes                                                   *sqhell-filetypes*
+4. Filetypes                                                   *sqhell-filetypes*
 
 SQHell comes with a few different filetypes for results to aid in
 context aware operations.
@@ -151,7 +193,6 @@ SQHTable                                                        *sqhell-sqhtable
         K shows man pages and help pages with other vim files, this is
         semantically similar.
 
-
 SQHDatabase                                                  *sqhell-sqhdatabase*
 
     `e` - Show the tables belonging to this database.
@@ -162,7 +203,6 @@ SQHDatabase                                                  *sqhell-sqhdatabase
 
         Note this reloads the current SQHDatabase buffer
 
-
 SQHResult                                                      *sqhell-sqhresult*
 
     `dd` - Delete the selected row.
@@ -170,20 +210,29 @@ SQHResult                                                      *sqhell-sqhresult
         Note this reloads the current SQHResult buffer
 
     `s` - Sort results by the column the cursor is on
-
         Equivalent to `:SQHSortResults -f`
 
     `S` - Sort results by the column the cursor is on (in reverse)
-
         Equivalent to `:SQHSortResults -fr`
 
     `e` - Edit current table row. Closes current buffer (SQHResult)
-          and opens new SQHInsert buffer in current window.
-
+        and opens a new SQHInsert buffer in current window.
 
 SQHInsert                                                      *sqhell-sqhinsert*
 
-    `ZZ` - Close and save row to database.
+    `ZZ` - Close and save the row to the database.
+
+===============================================================================
+5. Statusline                                                 *sqhell-statusline*
+
+SQHell exposes 1 variable for you to see the current host you're connecting
+to.
+
+    `sqhell#Host()` - Returns the current host you're connected to.
+
+An example statusline configuration
+
+    `set statusline=%{fugitive#statusline()}%y%m%=%f[%02p%%][%{sqhell#Host()}]`
 
 
 vim:tw=78:ts=8:ft=help:norl:
