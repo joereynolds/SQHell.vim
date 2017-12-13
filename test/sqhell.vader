@@ -49,6 +49,33 @@ Execute (to see if we're able to extract the database name):
   let actual = mysql#GetDatabase()
   AssertEqual expected, actual
 
+Given (A buffer with some junk on the top):
+
+  mysql: [Warning] Using a password on the command line interface can be insecure.
+  +--------------------+
+  | Database           |
+  +--------------------+
+  | information_schema |
+  | mysql              |
+  | performance_schema |
+  | php_server_monitor |
+  | symfony            |
+  +--------------------+
+
+Execute (Format the buffer):
+  call mysql#PostBufferFormat()
+
+Expect (A cleaned up output):
+  +--------------------+
+  | Database           |
+  +--------------------+
+  | information_schema |
+  | mysql              |
+  | performance_schema |
+  | php_server_monitor |
+  | symfony            |
+  +--------------------+
+
 Given SQHResult (A buffer that we will parse headings from):
   +----+-----------------+-------------------------------------+------------+----------------------------+--------------------------------------------+
   | id | prefix          | location                            | date       | artist                     | url                                        |
