@@ -1,10 +1,13 @@
+function! mysql#GetSystemCommand(user, password, host, database, command)
+    return 'mysql --unbuffered -u' . a:user . ' -p' . a:password . ' -h' . a:host . ' --table -e ' . shellescape(a:command)
+endfunction
+
 function! mysql#GetResultsFromQuery(command)
     let l:user = g:sqh_connections[g:sqh_connection]['user']
     let l:password = g:sqh_connections[g:sqh_connection]['password']
     let l:host = g:sqh_connections[g:sqh_connection]['host']
 
-    let l:connection_details = 'mysql --unbuffered -u' . l:user . ' -p' . l:password . ' -h' . l:host
-    let l:system_command = l:connection_details . ' --table -e ' . shellescape(a:command)
+    let l:system_command = mysql#GetSystemCommand(l:user, l:password, l:host, '', a:command)
     let l:query_results = system(l:system_command)
     return l:query_results
 endfunction
@@ -41,13 +44,11 @@ endfunction
 " - database: string, the database name
 " - show: boolean, show databases?
 function! mysql#DropDatabase(database, show)
-
     let l:drop_query = 'DROP DATABASE ' . a:database
     let prompt = confirm(sqhell#GeneratePrompt(l:drop_query), "&Yes\n&No", 2)
     if (prompt == 1)
         call mysql#GetResultsFromQuery(l:drop_query)
         if (a:show)
-          :bd
           call mysql#ShowDatabases()
         endif
     endif
@@ -55,7 +56,7 @@ endfunction
 
 "Returns the last selected database"
 function! mysql#GetDatabase()
-    return g:sqh_database
+    return sqhell#TrimString(g:sqh_database)
 endfunction
 
 "Drops table by pressing 'dd'
@@ -80,7 +81,6 @@ function! mysql#DropTableFromDatabase(database, table, show)
     if (l:prompt == 1)
         call mysql#GetResultsFromQuery(l:drop_query)
         if(a:show)
-            :bd
             call sqhell#ShowTablesForDatabase(a:database)
         endif
     endif
@@ -116,7 +116,7 @@ function! mysql#DeleteRow()
     let attr = mysql#GetColumnName()
     let list = sqhell#GetTableName()
     let table = list[0]
-    let db = list[1]
+    let db = mysql#GetDatabase()
 
     let l:delete_query = 'DELETE FROM ' . db . '.' . table . ' WHERE ' . attr . '=' . "\'" . row . "\'"
     let l:select_query = 'SELECT * FROM ' . db . '.' . table . ' LIMIT ' . g:sqh_results_limit
@@ -124,7 +124,6 @@ function! mysql#DeleteRow()
 
     if (prompt == 1)
         call mysql#GetResultsFromQuery(l:delete_query)
-        :bd
         call sqhell#ExecuteCommand(l:select_query)
     endif
 endfunction
@@ -150,7 +149,6 @@ function! mysql#EditRow()
     let db = tmp[0]
     let table = tmp[1]
 
-    :bd
     call sqhell#InsertResultsToNewBuffer('SQHInsert', "\n" . head . "\n" . csv, 1)
     let b:type = 'edit'
     let b:prev = csv
@@ -166,7 +164,7 @@ function! mysql#AddRow()
     if(query == 'Error')
         return
     endif
-    :bd
+
     call mysql#GetResultsFromQuery(query)
     call sqhell#ExecuteCommand('SELECT * FROM ' . t:tabInfo)
     unlet t:tabInfo

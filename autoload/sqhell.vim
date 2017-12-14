@@ -107,9 +107,8 @@ function! sqhell#GetTableName()
     let l:savewin = winnr()
     wincmd p
     let l:table = expand('<cword>')
-    let l:db = sqhell#TrimString(g:sqh_database)
     execute l:savewin . "wincmd w"
-    return [l:table, l:db]
+    return l:table
 endfunction
 
 function! sqhell#TrimString(str)
