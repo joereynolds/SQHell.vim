@@ -104,6 +104,7 @@ Inside an SQHResult you can press the following
 
 `e` to edit the current row. This will open an SQHInsert buffer
 
+For more sorting options, you can use `:SQHSortResults` with extra arguments for the unix sort command, a la `:SQHSortResults -rn`. It will always sort by the column the cursor is located on.
 
 ### SQHInsert
 
@@ -111,8 +112,6 @@ Inside an SQHInsert you can press the following
 
 `ZZ` to close and save the edited row. This will reopen the previous SQHResult buffer
 
-
-For more sorting options, you can use `:SQHSortResults` with extra arguments for the unix sort command, a la `:SQHSortResults -rn`. It will always sort by the column the cursor is located on.
 
 ## Contributing
 

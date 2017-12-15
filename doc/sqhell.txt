@@ -51,11 +51,17 @@ i.e. `let g:sqh_provider = 'psql'`
 
 g:sqh_results_output                                      *sqhell-results-output*
 
-Whether results should open in a new split each time or occupy the same
-window.
+g:sqh_results_output can be one of 'nosplit', 'split', or 'smart'.
+(Default is 'nosplit')
 
-The default is 'nosplit', set it to any other value to have it split into
-a new buffer
+'nosplit' - Use the current buffer for every query.
+
+'split' - Use a new split for every query.
+
+'smart' - Create one split and use this. If a query is executed in another
+          buffer, the results will show in the 'smart' buffer instead
+          (similar to Neoterm and friends).
+          Note that this option is a work in progress and bugs are expected.
 
 i.e. `let g:sqh_results_output = 'split'`
 

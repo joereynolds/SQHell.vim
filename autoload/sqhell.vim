@@ -1,3 +1,6 @@
+let s:buffer_id = -1
+let s:window_id = -1
+
 "This is for completion of the
 ":SQHSwitchConnection command"
 function! sqhell#GetHosts(arglead, cmdline, cursorPos)
@@ -50,6 +53,15 @@ function! sqhell#InsertResultsToNewBuffer(local_filetype, query_results, format)
 
     if g:sqh_results_output ==? 'nosplit'
         enew! | put =a:query_results
+    elseif g:sqh_results_output ==? 'smart'
+        if !win_gotoid(s:window_id)
+            new sqhell | wincmd J
+            let s:buffer_id = bufnr('%')
+            let s:window_id = win_getid()
+        endif
+        execute 'silent buffer ' . s:buffer_id
+        keepjumps normal! gg"_dG
+        put =a:query_results
     else
         new | put =a:query_results
     endif
