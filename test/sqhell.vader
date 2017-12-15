@@ -3,6 +3,11 @@ Execute (to see if our mysql command is constructed correctly without a database
   let actual = mysql#GetSystemCommand('root', 'hunter2', '45.32.44.233', '', 'SHOW DATABASES')
   AssertEqual expected, actual
 
+Execute (to see if our mysql command is constructed correctly with a database):
+  let expected = 'mysql --unbuffered -uroot -phunter2 -Dcustomers -h45.32.44.233 --table -e ''SHOW DATABASES'''
+  let actual = mysql#GetSystemCommand('root', 'hunter2', '45.32.44.233', 'customers', 'SHOW DATABASES')
+  AssertEqual expected, actual
+
 Execute (to see if all commands are available):
   AssertEqual exists(':SQHSwitchConnection'), 2
   AssertEqual exists(':SQHShowDatabases'), 2

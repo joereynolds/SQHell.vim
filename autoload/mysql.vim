@@ -1,5 +1,14 @@
 function! mysql#GetSystemCommand(user, password, host, database, command)
-    return 'mysql --unbuffered -u' . a:user . ' -p' . a:password . ' -h' . a:host . ' --table -e ' . shellescape(a:command)
+    let l:user = '-u' . a:user . ' '
+    let l:password = '-p' . a:password . ' '
+    let l:host = '-h' . a:host . ' '
+    let l:database = ''
+
+    if a:database !=? ''
+        let l:database = '-D' . a:database . ' '
+    endif
+
+    return 'mysql --unbuffered ' . l:user . l:password . l:database . l:host . '--table -e ' . shellescape(a:command)
 endfunction
 
 function! mysql#GetResultsFromQuery(command)
@@ -7,7 +16,15 @@ function! mysql#GetResultsFromQuery(command)
     let l:password = g:sqh_connections[g:sqh_connection]['password']
     let l:host = g:sqh_connections[g:sqh_connection]['host']
 
-    let l:system_command = mysql#GetSystemCommand(l:user, l:password, l:host, '', a:command)
+    "pretty sure we can use get(g:, 'sqh_connections....'
+    "instead of this but it will need some execute hackyness probably
+    let l:database = ''
+
+    if has_key(g:sqh_connections[g:sqh_connection], 'database')
+        let l:database = g:sqh_connections[g:sqh_connection]['database']
+    endif
+
+    let l:system_command = mysql#GetSystemCommand(l:user, l:password, l:host, l:database, a:command)
     let l:query_results = system(l:system_command)
     return l:query_results
 endfunction
@@ -45,8 +62,8 @@ endfunction
 " - show: boolean, show databases?
 function! mysql#DropDatabase(database, show)
     let l:drop_query = 'DROP DATABASE ' . a:database
-    let prompt = confirm(sqhell#GeneratePrompt(l:drop_query), "&Yes\n&No", 2)
-    if (prompt == 1)
+    let l:prompt = confirm(sqhell#GeneratePrompt(l:drop_query), "&Yes\n&No", 2)
+    if (l:prompt == 1)
         call mysql#GetResultsFromQuery(l:drop_query)
         if (a:show)
           call mysql#ShowDatabases()
