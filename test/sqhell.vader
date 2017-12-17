@@ -53,38 +53,38 @@ Execute (to see if we echo a message when we specify an invalid host):
 
 Execute (to see if the describe table query is built correctly):
   let expected = 'DESCRIBE dbname.tabname'
-  let actual = mysqlQuery#GetDescribeTableQuery('dbname', 'tabname')
+  let actual = mysql#GetDescribeTableQuery('dbname', 'tabname')
   AssertEqual expected, actual
 
 Execute (to see if the select query is built correctly):
   let g:sqh_results_limit = 100
   let expected = 'SELECT * FROM dbname.tabname LIMIT 100'
-  let actual = mysqlQuery#GetSelectQuery('dbname', 'tabname')
+  let actual = mysql#GetSelectQuery('dbname', 'tabname')
   AssertEqual expected, actual
 
 Execute (to see if the show databases query is built correctly):
   let expected = 'SHOW DATABASES'
-  let actual = mysqlQuery#GetShowDatabasesQuery()
+  let actual = mysql#GetShowDatabasesQuery()
   AssertEqual expected, actual
 
 Execute (to see if the show tables query is built correctly):
   let expected = 'SHOW TABLES FROM dbname'
-  let actual = mysqlQuery#GetShowTablesQuery('dbname')
+  let actual = mysql#GetShowTablesQuery('dbname')
   AssertEqual expected, actual
 
 Execute (to see if the drop database query is built correctly):
   let expected = 'DROP DATABASE dbname'
-  let actual = mysqlQuery#GetDropDatabaseQuery('dbname')
+  let actual = mysql#GetDropDatabaseQuery('dbname')
   AssertEqual expected, actual
 
 Execute (to see if the drop table query is built correctly):
   let expected = 'DROP TABLE dbname.tabname'
-  let actual = mysqlQuery#GetDropTableQuery('dbname', 'tabname')
+  let actual = mysql#GetDropTableQuery('dbname', 'tabname')
   AssertEqual expected, actual
 
 Execute (to see if the delete query is built correctly):
   let expected = "DELETE FROM dbname.tabname WHERE column='value'"
-  let actual = mysqlQuery#GetDeleteQuery('dbname', 'tabname', 'column', 'value')
+  let actual = mysql#GetDeleteQuery('dbname', 'tabname', 'column', 'value')
   AssertEqual expected, actual
 
 Execute (to see if we're able to extract the database name):
