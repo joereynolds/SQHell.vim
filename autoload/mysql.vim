@@ -184,7 +184,7 @@ function! mysql#AddRow()
             echom 'Expected: ' . len(cols) . ', got: ' . len(vals) . '.'
             return 'Error'
         endif
-        let query = mysql#CreateUpdateFromCSV(cols, vals, b:prev)
+        let query = mysql#GetUpdateQuery(cols, vals, b:prev)
     elseif(b:type == 'insert')
         "TODO: create insert into query
     endif
@@ -297,7 +297,7 @@ function! mysql#GetDeleteQuery(database, table, column, value)
     return l:query
 endfunction
 
-function! mysql#CreateUpdateFromCSV(columns, values, prev_values)
+function! mysql#GetUpdateQuery(columns, values, prev_values)
     let assign = ' SET '
     let where = ' WHERE '
     for i in range(0,len(a:columns)-1)
