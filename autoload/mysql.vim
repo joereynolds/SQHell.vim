@@ -31,27 +31,30 @@ endfunction
 
 "This is ran when press 'K' on an SQHTable buffer"
 function! mysql#DescribeTable(table)
-    let l:query = 'DESCRIBE ' . mysql#GetDatabase() . '.' . a:table
+    let l:query = mysql#GetDescribeTableQuery(mysql#GetDatabase(), a:table)
     call sqhell#InsertResultsToNewBuffer('SQHUnspecified', mysql#GetResultsFromQuery(l:query), 1)
 endfunction
 
 "This is ran when we press 'e' on an SQHTable buffer
 function! mysql#ShowRecordsInTable(table)
-    let l:query = 'SELECT * FROM ' . mysql#GetDatabase() . '.' . a:table . ' LIMIT ' . g:sqh_results_limit
+    let t:table = a:table
+    let l:query = mysql#GetSelectQuery(mysql#GetDatabase(), a:table)
     call sqhell#ExecuteCommand(l:query)
 endfunction
 
 function! mysql#ShowDatabases()
-    call sqhell#InsertResultsToNewBuffer('SQHDatabase', mysql#GetResultsFromQuery('SHOW DATABASES'), 1)
+    let l:query = mysql#GetShowDatabasesQuery()
+    call sqhell#InsertResultsToNewBuffer('SQHDatabase', mysql#GetResultsFromQuery(l:query), 1)
 endfunction
 
 "Shows all tables for a given database
 "Can also be ran by pressing 'e' in
 "an SQHDatabase buffer
 function! mysql#ShowTablesForDatabase(database)
-    "The entry point and ONLY place g:sqh_database should be set"
+    "The entry point and ONLY place w:database should be set"
     let g:sqh_database = a:database
-    call sqhell#InsertResultsToNewBuffer('SQHTable', mysql#GetResultsFromQuery('SHOW TABLES FROM ' . mysql#GetDatabase()), 1)
+    let l:query = mysql#GetShowTablesQuery(mysql#GetDatabase())
+    call sqhell#InsertResultsToNewBuffer('SQHTable', mysql#GetResultsFromQuery(l:query), 1)
 endfunction
 
 "Drops database at cursor
@@ -61,12 +64,13 @@ endfunction
 " - database: string, the database name
 " - show: boolean, show databases?
 function! mysql#DropDatabase(database, show)
-    let l:drop_query = 'DROP DATABASE ' . a:database
-    let l:prompt = confirm(sqhell#GeneratePrompt(l:drop_query), "&Yes\n&No", 2)
-    if (l:prompt == 1)
+    let l:drop_query = mysql#GetDropDatabaseQuery(a:database)
+    let prompt = confirm(sqhell#GeneratePrompt(l:drop_query), "&Yes\n&No", 2)
+    if (prompt == 1)
         call mysql#GetResultsFromQuery(l:drop_query)
         if (a:show)
-          call mysql#ShowDatabases()
+            let l:results = mysql#GetResultsFromQuery(mysql#GetShowDatabasesQuery())
+            call mysql#ReloadBuffer(l:results)
         endif
     endif
 endfunction
@@ -74,6 +78,11 @@ endfunction
 "Returns the last selected database"
 function! mysql#GetDatabase()
     return sqhell#TrimString(g:sqh_database)
+endfunction
+
+"Returns the last selected table
+function! mysql#GetTable()
+    return t:table
 endfunction
 
 "Drops table by pressing 'dd'
@@ -91,14 +100,15 @@ endfunction
 " - table: string, the table name
 " - show: boolean, show databases?
 function! mysql#DropTableFromDatabase(database, table, show)
-    let l:drop_query = 'DROP TABLE ' . sqhell#TrimString(a:database) . "." . a:table
+    let l:drop_query = mysql#GetDropTableQuery(a:database, a:table)
 
     let l:prompt = confirm(sqhell#GeneratePrompt(l:drop_query), "&Yes\n&No", 2)
 
     if (l:prompt == 1)
         call mysql#GetResultsFromQuery(l:drop_query)
         if(a:show)
-            call sqhell#ShowTablesForDatabase(a:database)
+            let l:results = mysql#GetResultsFromQuery(mysql#GetShowTablesQuery(a:database))
+            call mysql#ReloadBuffer(l:results)
         endif
     endif
 endfunction
@@ -131,17 +141,17 @@ endfunction
 function! mysql#DeleteRow()
     let row = mysql#GetColumnValue()
     let attr = mysql#GetColumnName()
-    let list = sqhell#GetTableName()
-    let table = list[0]
+    let table = mysql#GetTable()
     let db = mysql#GetDatabase()
 
-    let l:delete_query = 'DELETE FROM ' . db . '.' . table . ' WHERE ' . attr . '=' . "\'" . row . "\'"
-    let l:select_query = 'SELECT * FROM ' . db . '.' . table . ' LIMIT ' . g:sqh_results_limit
+    let l:delete_query = mysql#GetDeleteQuery(db, table, attr, row)
+    let l:select_query = mysql#GetSelectQuery(db, table)
     let prompt = confirm(sqhell#GeneratePrompt(l:delete_query), "&Yes\n&No", 2)
 
     if (prompt == 1)
         call mysql#GetResultsFromQuery(l:delete_query)
-        call sqhell#ExecuteCommand(l:select_query)
+        let l:results = mysql#GetResultsFromQuery(l:select_query)
+        call mysql#ReloadBuffer(l:results)
     endif
 endfunction
 
@@ -152,29 +162,29 @@ function! mysql#EditRow()
     let savecur = getcurpos()
     let head = mysql#FormatHeadingsAsCsv(mysql#GetTableHeadings())
     call setpos('.', savecur)
-    let tmp = split(b:last_query, ' ')
-    let index = index(tmp, 'WHERE')
-    if(index != -1)
-        let tmp = tmp[0:index-1]
-    endif
-    let index = index(tmp, 'LIMIT')
-    if(index != -1)
-        let tmp = tmp[0:index-1]
-    endif
-    let tmp = tmp[len(tmp)-1]
-    let tmp = split(tmp, '\.')
-    let db = tmp[0]
-    let table = tmp[1]
 
     call sqhell#InsertResultsToNewBuffer('SQHInsert', "\n" . head . "\n" . csv, 1)
     let b:type = 'edit'
     let b:prev = csv
-    let t:tabInfo = db . '.' . table
 endfunction
 
 function! mysql#AddRow()
     if(b:type == 'edit')
-        let query = mysql#CreateUpdateFromCSV()
+        let cols = split(getline(1), ',')
+        let vals = getline(2)
+        let vals = split(vals, '"')
+        let vals = filter(vals, 'v:val != ","')
+        let vals = map(vals, '"\"" . v:val . "\""')
+        let b:prev = split(b:prev, '"')
+        let b:prev = filter(b:prev, 'v:val != ","')
+        let b:prev = map(b:prev, '"\"" . v:val . "\""')
+
+        if len(cols) != len(vals)
+            echom 'Incorrect number of values.'
+            echom 'Expected: ' . len(cols) . ', got: ' . len(vals) . '.'
+            return 'Error'
+        endif
+        let query = mysql#GetUpdateQuery(cols, vals, b:prev)
     elseif(b:type == 'insert')
         "TODO: create insert into query
     endif
@@ -183,43 +193,18 @@ function! mysql#AddRow()
     endif
 
     call mysql#GetResultsFromQuery(query)
-    call sqhell#ExecuteCommand('SELECT * FROM ' . t:tabInfo)
-    unlet t:tabInfo
+    let db = mysql#GetDatabase()
+    let table = mysql#GetTable()
+    let l:results = mysql#GetResultsFromQuery(mysql#GetSelectQuery(db, table))
+    call mysql#ReloadBuffer(l:results)
 endfunction
 
-"Generate the update query from the edited csv style buffer
-function! mysql#CreateUpdateFromCSV()
-    " Currently the csv is only 2 lines
-    " 1st: the table header (to get column names)
-    " 2nd: the row to edit
-    let cols = split(getline(1), ',')
-    let vals = getline(2)
-    let vals = split(vals, '"')
-    let vals = filter(vals, 'v:val != ","')
-    let vals = map(vals, '"\"" . v:val . "\""')
-    let b:prev = split(b:prev, '"')
-    let b:prev = filter(b:prev, 'v:val != ","')
-    let b:prev = map(b:prev, '"\"" . v:val . "\""')
-
-    if len(cols) != len(vals)
-        echom 'Incorrect number of values.'
-        echom 'Expected: ' . len(cols) . ', got: ' . len(vals) . '.'
-        return 'Error'
-    endif
-
-    let assign = ' SET '
-    let where = ' WHERE '
-    for i in range(0,len(cols)-1)
-        if(i != 0)
-            let assign = assign . ', '
-            let where = where . ' AND '
-        endif
-        let assign = assign . cols[i] . '=' . vals[i]
-        let where = where . cols[i] . '=' . b:prev[i]
-    endfor
-
-    let query = 'UPDATE ' . t:tabInfo . assign . where
-    return query
+function! mysql#ReloadBuffer(content)
+    let l:curent_pos = getpos('.')
+    :keepjumps normal! ggdG
+    :put=a:content
+    call mysql#PostBufferFormat()
+    call setpos('.', l:curent_pos)
 endfunction
 
 "Returns a list of all of the column headings in the current SQHResult
@@ -273,4 +258,59 @@ function! mysql#GetColumnValue()
     let val = sqhell#TrimString(val)
     call setpos('.', savecurpos)
     return val
+endfunction
+
+"====================== Query functions ==============================
+
+function! mysql#GetDescribeTableQuery(database, table)
+    let l:query = 'DESCRIBE ' . a:database . '.' . a:table
+    return l:query
+endfunction
+
+function! mysql#GetSelectQuery(database, table)
+    let l:query = 'SELECT * FROM ' . a:database . '.' . a:table . ' LIMIT ' . g:sqh_results_limit
+    return l:query
+endfunction
+
+function! mysql#GetShowDatabasesQuery()
+    let l:query = 'SHOW DATABASES'
+    return l:query
+endfunction
+
+function! mysql#GetShowTablesQuery(database)
+    let l:query = 'SHOW TABLES FROM ' . a:database
+    return l:query
+endfunction
+
+function! mysql#GetDropDatabaseQuery(database)
+    let l:query = 'DROP DATABASE ' . a:database
+    return l:query
+endfunction
+
+function! mysql#GetDropTableQuery(database, table)
+    let l:query = 'DROP TABLE ' . a:database . '.' . a:table
+    return l:query
+endfunction
+
+function! mysql#GetDeleteQuery(database, table, column, value)
+    let l:query = 'DELETE FROM ' . a:database . '.' . a:table . ' WHERE ' . a:column . '=' . "\'" . a:value . "\'"
+    return l:query
+endfunction
+
+function! mysql#GetUpdateQuery(columns, values, prev_values)
+    let assign = ' SET '
+    let where = ' WHERE '
+    for i in range(0,len(a:columns)-1)
+        if(i != 0)
+            let assign = assign . ', '
+            let where = where . ' AND '
+        endif
+        let assign = assign . a:columns[i] . '=' . a:values[i]
+        let where = where . a:columns[i] . '=' . a:prev_values[i]
+    endfor
+
+    let db = mysql#GetDatabase()
+    let table = mysql#GetTable()
+    let query = 'UPDATE ' . db . '.' . table . assign . where
+    return query
 endfunction
