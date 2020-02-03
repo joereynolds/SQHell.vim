@@ -8,10 +8,9 @@ The supported providers at the moment are
 - Postgres
 - Sqlite
 
-It started off simply enough
+It started off simply enough:
 
 ```
-"The origins of SQHell
 nnoremap <leader>xc :r !mysql -uroot -psomepass -h somehost.com <<< `cat %` \| column -t<cr>
 ```
 
@@ -19,7 +18,8 @@ It grew from there...
 
 ## Examples
 
-(Gifs are using the data from my punk rock band [bogans](http://bogans.uk))
+(Gifs are using the data from my band [bogans](http://bogans.uk))
+
 ### Execute a command using `SQHExecute!`
 
 Execute a line with `SQHExecute`.
