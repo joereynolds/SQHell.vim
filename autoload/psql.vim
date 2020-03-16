@@ -17,15 +17,24 @@ function! psql#ShowDatabases()
 endfunction
 
 function! psql#SortResults(sort_options)
+    if getline(".") =~ '^\s*$'
+      echo "Cursor must be within table to sort"
+      return
+    endif
+
+    let first_line = search('^\s*$', 'bnW') + 3
+    let last_line = search('^\s*$', 'nW') - 1
+
     let cursor_pos = getpos('.')
-    let line_until_cursor = getline('.')[:cursor_pos[2]]
+    let line_until_cursor = getline(first_line)[:cursor_pos[2] - 1]
     let sort_column = len(substitute(line_until_cursor, '[^|]', '', 'g')) + 1
-    exec '3,$!sort -k ' . sort_column . ' -t \| ' . a:sort_options
+
+    let sort_command = first_line . ',' . last_line . '!sort -k ' . sort_column . ' -t \| ' . a:sort_options
+    exec sort_command
     call setpos('.', cursor_pos)
 endfunction
 
 function! psql#PostBufferFormat()
     keepjumps normal! ggdd
-    keepjumps normal! Gdkgg
 endfunction
 
