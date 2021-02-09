@@ -1,14 +1,15 @@
-function! mysql#GetSystemCommand(user, password, host, database, command)
+function! mysql#GetSystemCommand(user, password, host, database, port, command)
     let l:user = '-u' . a:user . ' '
     let l:password = '-p' . a:password . ' '
     let l:host = '-h' . a:host . ' '
     let l:database = ''
+    let l:port = '--port=' . a:port . ' '
 
     if a:database !=? ''
         let l:database = '-D' . a:database . ' '
     endif
 
-    return 'mysql --unbuffered ' . l:user . l:password . l:database . l:host . '--table -e ' . shellescape(a:command)
+    return 'mysql --unbuffered ' . l:user . l:password . l:database . l:host . l:port . '--table -e ' . shellescape(a:command)
 endfunction
 
 function! mysql#GetResultsFromQuery(command)
@@ -19,12 +20,16 @@ function! mysql#GetResultsFromQuery(command)
     "pretty sure we can use get(g:, 'sqh_connections....'
     "instead of this but it will need some execute hackyness probably
     let l:database = ''
-
     if has_key(g:sqh_connections[g:sqh_connection], 'database')
         let l:database = g:sqh_connections[g:sqh_connection]['database']
     endif
 
-    let l:system_command = mysql#GetSystemCommand(l:user, l:password, l:host, l:database, a:command)
+    let l:port = '3306'
+    if has_key(g:sqh_connections[g:sqh_connection], 'port')
+        let l:port = g:sqh_connections[g:sqh_connection]['port']
+    endif
+
+    let l:system_command = mysql#GetSystemCommand(l:user, l:password, l:host, l:database, l:port, a:command)
     let l:query_results = system(l:system_command)
     return l:query_results
 endfunction
