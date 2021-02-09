@@ -58,6 +58,8 @@ multiple hosts. By default SQHell uses the 'default' key details (no surprise th
 Example:
 
 ```
+let g:sqh_provider = 'psql'
+
 let g:sqh_connections = {
     \ 'default': {
     \   'user': 'root',
@@ -75,8 +77,19 @@ let g:sqh_connections = {
 You can use the `SQHSwitchConnection` function to change hosts.
 i.e. `SQHSwitchConnection live`
 
+SQHell currently supports 3 providers and fallsback to MySQL if none specificed.
+
+The 3 providers are:
+
+- `mysql` - A connection to a MySQL DB. Specify it with `let g:sqh_provider = 'mysql'`
+
+- `psql` - A connection to a Postgres DB. Specify it with `let g:sqh_provider = 'psql'`
+
+- `sqlite` - A connection to a Sqlite DB. Specify it with `let g:sqh_provider = 'sqlite'`
+
 I **strongly** suggest that the above configuration details are kept *outside*
 of version control and gitignored in your global gitignore.
+
 
 ## Default Keybindings
 
